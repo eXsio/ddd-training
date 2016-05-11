@@ -26,7 +26,7 @@ public class EventBus {
     }
 
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public void publishEvent(DomainEvent event) {
         try {
             eventDomainDao.create(event).save();

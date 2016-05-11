@@ -1,4 +1,4 @@
-package com.ddd.poc.command.event;
+package com.ddd.poc.domain.security.event;
 
 import com.ddd.poc.domain.core.event.DomainEvent;
 

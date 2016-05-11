@@ -1,8 +1,8 @@
 package com.ddd.poc.command.controller;
 
-import com.ddd.poc.command.event.UserCreatedEvent;
-import com.ddd.poc.command.event.UserDeletedEvent;
-import com.ddd.poc.command.event.UserUpdatedEvent;
+import com.ddd.poc.domain.security.event.UserCreatedEvent;
+import com.ddd.poc.domain.security.event.UserDeletedEvent;
+import com.ddd.poc.domain.security.event.UserUpdatedEvent;
 import com.ddd.poc.domain.api.RestUrls;
 import com.ddd.poc.domain.core.service.EventBus;
 import com.ddd.poc.domain.security.dto.UserDTO;
