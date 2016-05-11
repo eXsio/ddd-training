@@ -11,7 +11,9 @@
 
     <groupId>com.ddd.poc</groupId>
     <artifactId>command</artifactId>
-
+    <properties>
+        <start-class>com.ddd.poc.app.main.Application</start-class>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.ddd.poc</groupId>

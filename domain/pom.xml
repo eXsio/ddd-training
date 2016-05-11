@@ -11,6 +11,8 @@
 
     <groupId>com.ddd.poc</groupId>
     <artifactId>domain</artifactId>
-
+    <properties>
+        <start-class>com.ddd.poc.app.main.Application</start-class>
+    </properties>
 
 </project>

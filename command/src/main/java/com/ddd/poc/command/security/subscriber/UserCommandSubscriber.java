@@ -1,8 +1,8 @@
-package com.ddd.poc.command.subscriber;
+package com.ddd.poc.command.security.subscriber;
 
-import com.ddd.poc.domain.security.event.UserCreatedEvent;
-import com.ddd.poc.domain.security.event.UserDeletedEvent;
-import com.ddd.poc.domain.security.event.UserUpdatedEvent;
+import com.ddd.poc.command.security.event.UserCreatedEvent;
+import com.ddd.poc.command.security.event.UserDeletedEvent;
+import com.ddd.poc.command.security.event.UserUpdatedEvent;
 import com.ddd.poc.domain.security.dao.UserDomainDao;
 import com.ddd.poc.domain.security.model.UserDM;
 import org.slf4j.Logger;

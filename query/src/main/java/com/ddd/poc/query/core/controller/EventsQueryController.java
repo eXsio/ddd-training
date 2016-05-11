@@ -1,4 +1,4 @@
-package com.ddd.poc.query.controller;
+package com.ddd.poc.query.core.controller;
 
 import com.ddd.poc.domain.api.RestUrls;
 import com.ddd.poc.domain.core.dao.EventEntityDao;

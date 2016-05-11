@@ -167,7 +167,6 @@
     </dependencies>
 
     <build>
-        <finalName>clock</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

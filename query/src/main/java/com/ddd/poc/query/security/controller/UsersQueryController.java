@@ -1,4 +1,4 @@
-package com.ddd.poc.query.controller;
+package com.ddd.poc.query.security.controller;
 
 import com.ddd.poc.domain.api.RestUrls;
 import com.ddd.poc.domain.security.dao.UserEntityDao;
