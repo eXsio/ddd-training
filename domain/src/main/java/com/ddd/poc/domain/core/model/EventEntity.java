@@ -28,6 +28,10 @@ public class EventEntity {
     @Column(nullable = false, updatable = false)
     private String data;
 
+    EventEntity() {
+
+    }
+
     public EventEntity(String eventClass, String data) {
         this.eventClass = eventClass;
         this.data = data;
