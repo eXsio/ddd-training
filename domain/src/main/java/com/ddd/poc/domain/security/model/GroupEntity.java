@@ -24,6 +24,9 @@ public class GroupEntity {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups")
     private Collection<UserEntity> users;
 
+    public GroupEntity() {
+    }
+
     public GroupEntity(String name) {
         this.name = name;
     }

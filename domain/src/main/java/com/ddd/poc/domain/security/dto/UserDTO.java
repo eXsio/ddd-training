@@ -16,6 +16,8 @@ public class UserDTO {
 
     private Collection<String> groups = Lists.newArrayList();
 
+
+
     public Long getId() {
         return id;
     }

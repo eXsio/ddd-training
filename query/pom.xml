@@ -12,5 +12,11 @@
     <groupId>com.ddd.poc</groupId>
     <artifactId>query</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>com.ddd.poc</groupId>
+            <artifactId>domain</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
