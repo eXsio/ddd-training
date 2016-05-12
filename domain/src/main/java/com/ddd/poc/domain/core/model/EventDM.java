@@ -3,7 +3,7 @@ package com.ddd.poc.domain.core.model;
 import com.ddd.poc.domain.core.dao.EventEntityDao;
 import com.ddd.poc.domain.core.event.DomainEvent;
 import com.ddd.poc.domain.core.ex.ClassNotFoundRuntimeException;
-import com.ddd.poc.domain.core.service.DataConverter;
+import com.ddd.poc.domain.core.util.DataConverter;
 import com.google.common.base.Preconditions;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +25,9 @@ public class EventDM<T extends DomainEvent> {
     }
 
     @Transactional
-    public void save() {
+    public EventDM save() {
         eventEntityDao.save(entity);
+        return this;
     }
 
     public Class<T> getEventClass() {

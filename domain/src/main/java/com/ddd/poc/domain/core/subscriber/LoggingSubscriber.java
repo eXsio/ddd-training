@@ -1,7 +1,7 @@
 package com.ddd.poc.domain.core.subscriber;
 
 import com.ddd.poc.domain.core.event.DomainEvent;
-import com.ddd.poc.domain.core.service.DataConverter;
+import com.ddd.poc.domain.core.util.DataConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;

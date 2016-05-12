@@ -1,6 +1,7 @@
 package com.ddd.poc.domain.core.service;
 
 import com.ddd.poc.domain.core.event.TestEvent;
+import com.ddd.poc.domain.core.util.DataConverter;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;

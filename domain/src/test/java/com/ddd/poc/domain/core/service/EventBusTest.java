@@ -9,6 +9,8 @@ import com.ddd.poc.domain.core.event.TestEvent;
 import com.ddd.poc.domain.core.model.CommandDM;
 import com.ddd.poc.domain.core.model.CommandEntity;
 import com.ddd.poc.domain.core.model.EventDM;
+import com.ddd.poc.domain.core.service.queue.SpringDispatcherEventQueueImpl;
+import com.ddd.poc.domain.core.service.store.JpaEventStoreImpl;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
@@ -65,7 +67,7 @@ public class EventBusTest {
         when(eventDomainDao.create(event, commandEntity)).thenReturn(eventDM);
         when(commandDM.createEvent(event)).thenReturn(eventDM);
 
-        underTest = new EventBus(publisher, commandDomainDao);
+        underTest = new EventBusImpl(new JpaEventStoreImpl(commandDomainDao), new SpringDispatcherEventQueueImpl(publisher));
     }
 
     @Test

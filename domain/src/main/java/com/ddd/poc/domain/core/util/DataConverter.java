@@ -1,4 +1,4 @@
-package com.ddd.poc.domain.core.service;
+package com.ddd.poc.domain.core.util;
 
 import com.ddd.poc.domain.core.ex.DataConversionRuntimeException;
 import com.fasterxml.jackson.core.JsonProcessingException;

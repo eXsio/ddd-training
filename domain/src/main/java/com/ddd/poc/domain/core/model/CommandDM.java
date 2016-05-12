@@ -5,11 +5,9 @@ import com.ddd.poc.domain.core.dao.CommandEntityDao;
 import com.ddd.poc.domain.core.dao.EventDomainDao;
 import com.ddd.poc.domain.core.event.DomainEvent;
 import com.ddd.poc.domain.core.ex.ClassNotFoundRuntimeException;
-import com.ddd.poc.domain.core.service.DataConverter;
+import com.ddd.poc.domain.core.util.DataConverter;
 import com.google.common.base.Preconditions;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 public class CommandDM<C extends DomainCommand> {
 
@@ -35,8 +33,9 @@ public class CommandDM<C extends DomainCommand> {
     }
 
     @Transactional
-    public void save() {
+    public CommandDM save() {
         commandEntityDao.save(entity);
+        return this;
     }
 
     public Class<C> getCommandClass() {
