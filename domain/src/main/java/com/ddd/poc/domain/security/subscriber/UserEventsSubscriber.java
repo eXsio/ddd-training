@@ -3,6 +3,8 @@ package com.ddd.poc.domain.security.subscriber;
 import com.ddd.poc.domain.security.dao.UserDomainDao;
 import com.ddd.poc.domain.security.event.UserCreatedEvent;
 import com.ddd.poc.domain.security.event.UserDeletedEvent;
+import com.ddd.poc.domain.security.event.UserJoinedGroupEvent;
+import com.ddd.poc.domain.security.event.UserLeftGroupEvent;
 import com.ddd.poc.domain.security.event.UserUpdatedEvent;
 import com.ddd.poc.domain.security.model.UserDM;
 import org.slf4j.Logger;
@@ -29,7 +31,6 @@ public class UserEventsSubscriber {
 
     @EventListener
     public void onUserCreated(UserCreatedEvent event) {
-
         LOGGER.info("User created subscriber called");
         userDomainDao.create().save(event.getUserDTO());
     }
@@ -46,5 +47,19 @@ public class UserEventsSubscriber {
         LOGGER.info("User deleted subscriber called");
         Optional<UserDM> userDM = userDomainDao.find(event.getUserId());
         userDM.ifPresent(UserDM::delete);
+    }
+
+    @EventListener
+    public void onUserJoinedGroup(UserJoinedGroupEvent event) {
+        LOGGER.info("User joined group subscriber called");
+        Optional<UserDM> userDM = userDomainDao.find(event.getUserId());
+        userDM.ifPresent(userDMObj -> userDMObj.joinGroup(event.getGroupId()));
+    }
+
+    @EventListener
+    public void onUserLeftGroup(UserLeftGroupEvent event) {
+        LOGGER.info("User left group subscriber called");
+        Optional<UserDM> userDM = userDomainDao.find(event.getUserId());
+        userDM.ifPresent(userDMObj -> userDMObj.leaveGroup(event.getGroupId()));
     }
 }

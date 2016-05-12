@@ -33,20 +33,13 @@ public class UserDM {
 
     @Transactional
     public UserDM save(UserDTO data) {
-        updateEntity(data);
-        userEntityDao.save(entity);
-
-        return this;
-    }
-
-    protected void updateEntity(UserDTO data) {
         Preconditions.checkNotNull(data);
         entity.setActive(data.isActive());
         entity.setPassword(encryptPassword(data.getPassword()));
         entity.setUsername(data.getUsername());
+        userEntityDao.save(entity);
 
-        addNewGroups(data);
-        removeDeletedGroups(data);
+        return this;
     }
 
     @Transactional
@@ -55,25 +48,20 @@ public class UserDM {
         return this;
     }
 
-    private void removeDeletedGroups(UserDTO data) {
-        Iterator<GroupEntity> groupEntityIterator = entity.getGroups().iterator();
-        while (groupEntityIterator.hasNext()) {
-            GroupEntity groupEntity = groupEntityIterator.next();
-            if (!data.getGroups().contains(groupEntity.getName())) {
-                groupEntityIterator.remove();
-            }
-        }
+    public UserDM joinGroup(Long groupId) {
+        GroupEntity groupEntity = groupEntityDao.findOne(groupId);
+        entity.addGroup(groupEntity);
+        userEntityDao.save(entity);
+        return this;
     }
 
-    private void addNewGroups(UserDTO data) {
-        for (String groupName : data.getGroups()) {
-            Optional<GroupEntity> group = groupEntityDao.findByName(groupName);
-            if (!group.isPresent()) {
-                group = Optional.ofNullable(groupEntityDao.save(new GroupEntity(groupName)));
-            }
-            group.ifPresent(entity::addGroup);
-        }
+    public UserDM leaveGroup(Long groupId) {
+        GroupEntity groupEntity = groupEntityDao.findOne(groupId);
+        entity.removeGroup(groupEntity);
+        userEntityDao.save(entity);
+        return this;
     }
+
 
     private String encryptPassword(String password) {
         return password;
