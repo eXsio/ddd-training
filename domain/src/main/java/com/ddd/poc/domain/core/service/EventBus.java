@@ -41,12 +41,10 @@ public class EventBus {
 
     private CommandDM getOrCreate(DomainCommand command) {
         Optional<CommandDM> commandDM = commandDomainDao.findByUuid(command.getUuid().toString());
-        if (commandDM.isPresent()) {
-            return commandDM.get();
-        } else {
+        return commandDM.map(commandDMObj -> commandDMObj).orElseGet(() -> {
             CommandDM newCommandDM = commandDomainDao.create(command);
             newCommandDM.save();
             return newCommandDM;
-        }
+        });
     }
 }
