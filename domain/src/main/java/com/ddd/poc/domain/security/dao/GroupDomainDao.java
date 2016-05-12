@@ -18,8 +18,8 @@ public class GroupDomainDao {
     }
 
     public Optional<GroupDM> find(Long id) {
-        GroupEntity groupEntity = groupEntityDao.findOne(id);
-        return groupEntity != null ? Optional.of(new GroupDM(groupEntity, groupEntityDao)) : Optional.<GroupDM>empty();
+        Optional<GroupEntity> groupEntity = groupEntityDao.findOne(id);
+        return groupEntity.map(groupEntityObj -> Optional.of(new GroupDM(groupEntityObj, groupEntityDao))).orElse(Optional.<GroupDM>empty());
     }
 
     public GroupDM create() {

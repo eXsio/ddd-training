@@ -31,7 +31,7 @@ public class GroupsQueryController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     GroupDTO getSingle(@PathVariable("id") Long id) {
-        return getGroupDTO(groupEntityDao.findOne(id));
+        return groupEntityDao.findOne(id).map(this::getGroupDTO).orElse(null);
     }
 
     private GroupDTO getGroupDTO(GroupEntity groupEntity) {

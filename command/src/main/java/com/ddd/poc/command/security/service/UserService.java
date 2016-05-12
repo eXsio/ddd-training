@@ -68,7 +68,7 @@ public class UserService {
 
     private void createGroupsIfNeeded(UserDTO userDTO, DomainCommand command) {
         for (String groupName : userDTO.getGroups()) {
-            if (!groupEntityDao.findByName(groupName).isPresent()) {
+            if (!groupEntityDao.findOneByName(groupName).isPresent()) {
                 eventBus.publishEvent(new GroupCreatedEvent(groupName), command);
             }
         }
@@ -95,7 +95,7 @@ public class UserService {
 
     private void addNewGroups(UserEntity userEntity, Collection<String> groups, DomainCommand command) {
         for (String groupName : groups) {
-            Optional<GroupEntity> group = groupEntityDao.findByName(groupName);
+            Optional<GroupEntity> group = groupEntityDao.findOneByName(groupName);
             group.ifPresent(groupEntity ->
             {
                 if (userCanJoinGroup(userEntity, groupEntity)) {

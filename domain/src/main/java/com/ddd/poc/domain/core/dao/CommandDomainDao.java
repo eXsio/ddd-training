@@ -22,8 +22,9 @@ public class CommandDomainDao {
     }
 
     public Optional<CommandDM> findByUuid(String uuid) {
-        CommandEntity commandEntity = commandEntityDao.findByUuid(uuid);
-        return commandEntity != null ? Optional.of(new CommandDM(commandEntity, commandEntityDao, eventDomainDao)) : Optional.<CommandDM>empty();
+        Optional<CommandEntity> commandEntity = commandEntityDao.findOneByUuid(uuid);
+        return commandEntity.map(commandEntityObj -> Optional.of(new CommandDM(commandEntityObj, commandEntityDao, eventDomainDao)))
+                .orElse(Optional.<CommandDM>empty());
     }
 
     public <T extends DomainCommand> CommandDM<T> create(T command) {

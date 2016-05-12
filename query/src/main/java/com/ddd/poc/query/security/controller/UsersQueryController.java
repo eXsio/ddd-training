@@ -31,7 +31,7 @@ public class UsersQueryController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     UserDTO getSingle(@PathVariable("id") Long id) {
-        return getUserDTO(userEntityDao.findOne(id));
+        return userEntityDao.findOne(id).map(this::getUserDTO).orElse(null);
     }
 
     private UserDTO getUserDTO(UserEntity userEntity) {

@@ -21,8 +21,8 @@ public class UserDomainDao {
     }
 
     public Optional<UserDM> find(Long id) {
-        UserEntity userEntity = userEntityDao.findOne(id);
-        return userEntity != null ? Optional.of(new UserDM(userEntity, userEntityDao, groupEntityDao)) : Optional.<UserDM>empty();
+        Optional<UserEntity> userEntity = userEntityDao.findOne(id);
+        return userEntity.map(userEntityObj -> Optional.of(new UserDM(userEntityObj, userEntityDao, groupEntityDao))).orElse(Optional.<UserDM>empty());
     }
 
     public UserDM create() {

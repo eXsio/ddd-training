@@ -10,7 +10,6 @@ import com.ddd.poc.domain.security.event.GroupCreatedEvent;
 import com.ddd.poc.domain.security.event.GroupDeletedEvent;
 import com.ddd.poc.domain.security.event.GroupUpdatedEvent;
 import com.ddd.poc.domain.security.event.UserLeftGroupEvent;
-import com.ddd.poc.domain.security.model.GroupEntity;
 import com.ddd.poc.domain.security.model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,12 +52,11 @@ public class GroupService {
     }
 
     private void removeUsersFromGroup(DeleteGroupCommand command) {
-        GroupEntity groupEntity = groupEntityDao.findOne(command.getGroupId());
-        if (groupEntity != null) {
+        groupEntityDao.findOne(command.getGroupId()).ifPresent(groupEntity -> {
             for (UserEntity userEntity : groupEntity.getUsers()) {
                 eventBus.publishEvent(new UserLeftGroupEvent(userEntity.getId(), groupEntity.getId()), command);
             }
-        }
+        });
     }
 
     private boolean canPerformOperation(DomainCommand command) {

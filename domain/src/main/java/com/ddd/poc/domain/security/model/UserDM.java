@@ -6,9 +6,6 @@ import com.ddd.poc.domain.security.dto.UserDTO;
 import com.google.common.base.Preconditions;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Iterator;
-import java.util.Optional;
-
 public class UserDM {
 
     private final UserEntity entity;
@@ -49,16 +46,18 @@ public class UserDM {
     }
 
     public UserDM joinGroup(Long groupId) {
-        GroupEntity groupEntity = groupEntityDao.findOne(groupId);
-        entity.addGroup(groupEntity);
-        userEntityDao.save(entity);
+        groupEntityDao.findOne(groupId).ifPresent(groupEntity -> {
+            entity.addGroup(groupEntity);
+            userEntityDao.save(entity);
+        });
         return this;
     }
 
     public UserDM leaveGroup(Long groupId) {
-        GroupEntity groupEntity = groupEntityDao.findOne(groupId);
-        entity.removeGroup(groupEntity);
-        userEntityDao.save(entity);
+        groupEntityDao.findOne(groupId).ifPresent(groupEntity -> {
+            entity.removeGroup(groupEntity);
+            userEntityDao.save(entity);
+        });
         return this;
     }
 
