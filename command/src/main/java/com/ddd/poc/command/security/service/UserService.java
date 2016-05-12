@@ -46,7 +46,7 @@ public class UserService {
             createGroupsIfNeeded(command.getUserDTO(), command);
             eventBus.publishEvent(new UserCreatedEvent(command.getUserDTO()), command);
             updateGroups(command.getUserDTO(), command);
-            sendNotificationEmal(command);
+            sendNotificationEmail(command);
         }
     }
 
@@ -55,14 +55,14 @@ public class UserService {
             createGroupsIfNeeded(command.getUserDTO(), command);
             eventBus.publishEvent(new UserUpdatedEvent(command.getUserDTO()), command);
             updateGroups(command.getUserDTO(), command);
-            sendNotificationEmal(command);
+            sendNotificationEmail(command);
         }
     }
 
     public void deleteUser(DeleteUserCommand command) {
         if (canPerformOperation(command)) {
             eventBus.publishEvent(new UserDeletedEvent(command.getUserId()), command);
-            sendNotificationEmal(command);
+            sendNotificationEmail(command);
         }
     }
 
@@ -113,7 +113,7 @@ public class UserService {
         return true;
     }
 
-    private void sendNotificationEmal(DomainCommand command) {
+    private void sendNotificationEmail(DomainCommand command) {
         //send email logic
     }
 }
