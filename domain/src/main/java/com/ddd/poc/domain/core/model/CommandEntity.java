@@ -7,22 +7,24 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
+import java.util.SortedSet;
 
 @Entity
 @Table(name = "commands")
-public class CommandEntity {
+public class CommandEntity implements Comparable<CommandEntity> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false, updatable = false)
     private Date createdAt = new Date();
 
@@ -35,8 +37,9 @@ public class CommandEntity {
     @Column(nullable = false, updatable = false, unique = true)
     private String uuid;
 
+    @OrderBy("createdAt asc")
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "command")
-    private Collection<EventEntity> events;
+    private SortedSet<EventEntity> events;
 
     CommandEntity() {
 
@@ -94,5 +97,14 @@ public class CommandEntity {
                 ", commandClass='" + commandClass + '\'' +
                 ", uuid='" + uuid + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(CommandEntity o) {
+        if(o == null || o.createdAt == null || createdAt == null) {
+            return -1;
+        } else {
+            return createdAt.compareTo(o.createdAt);
+        }
     }
 }

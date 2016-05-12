@@ -16,13 +16,13 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "events")
-public class EventEntity {
+public class EventEntity implements Comparable<EventEntity> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false, updatable = false)
     private Date createdAt = new Date();
 
@@ -96,5 +96,14 @@ public class EventEntity {
                 ", eventData='" + eventData + '\'' +
                 ", uuid='" + uuid + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(EventEntity o) {
+        if (o == null || o.createdAt == null || createdAt == null) {
+            return -1;
+        } else {
+            return createdAt.compareTo(o.createdAt);
+        }
     }
 }

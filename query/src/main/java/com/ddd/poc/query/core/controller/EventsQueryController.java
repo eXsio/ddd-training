@@ -6,6 +6,7 @@ import com.ddd.poc.domain.core.dto.CommandDTO;
 import com.ddd.poc.domain.core.dto.EventDTO;
 import com.ddd.poc.domain.core.model.CommandEntity;
 import com.ddd.poc.domain.core.model.EventEntity;
+import com.ddd.poc.query.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,7 +37,7 @@ public class EventsQueryController {
     protected EventDTO getEventDTO(EventEntity entity) {
         EventDTO eventDTO = new EventDTO();
         eventDTO.setId(entity.getId());
-        eventDTO.setCreatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(entity.getCreatedAt().getTime()), ZoneId.systemDefault()));
+        eventDTO.setCreatedAt(DateUtil.format(entity.getCreatedAt()));
         eventDTO.setEventClass(entity.getEventClass());
         eventDTO.setData(entity.getEventData());
         eventDTO.setUuid(entity.getUuid());
@@ -45,7 +46,7 @@ public class EventsQueryController {
             {
                 setCommandClass(commandEntity.getCommandClass());
                 setData(commandEntity.getCommandData());
-                setCreatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(commandEntity.getCreatedAt().getTime()), ZoneId.systemDefault()));
+                setCreatedAt(DateUtil.format(commandEntity.getCreatedAt()));
                 setId(commandEntity.getId());
                 setUuid(commandEntity.getUuid());
 

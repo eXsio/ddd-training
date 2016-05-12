@@ -4,7 +4,7 @@ package com.ddd.poc.domain.core.dao;
 import java.util.List;
 import java.util.Optional;
 
-public interface DomainDao<T> {
+public interface BaseEntityDao<T> {
 
     Optional<T> findOne(Long id);
 

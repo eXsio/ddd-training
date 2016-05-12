@@ -6,14 +6,12 @@ import com.ddd.poc.domain.core.dto.CommandDTO;
 import com.ddd.poc.domain.core.dto.EventDTO;
 import com.ddd.poc.domain.core.model.CommandEntity;
 import com.ddd.poc.domain.core.model.EventEntity;
+import com.ddd.poc.query.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -36,7 +34,7 @@ public class CommandsQueryController {
     protected CommandDTO getCommandDTO(CommandEntity entity) {
         CommandDTO commandDTO = new CommandDTO();
         commandDTO.setId(entity.getId());
-        commandDTO.setCreatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(entity.getCreatedAt().getTime()), ZoneId.systemDefault()));
+        commandDTO.setCreatedAt(DateUtil.format(entity.getCreatedAt()));
         commandDTO.setCommandClass(entity.getCommandClass());
         commandDTO.setData(entity.getCommandData());
         commandDTO.setEvents(entity.getEvents().stream().map(this::getEventDTO).collect(Collectors.toList()));
@@ -47,7 +45,7 @@ public class CommandsQueryController {
     protected EventDTO getEventDTO(EventEntity entity) {
         EventDTO eventDTO = new EventDTO();
         eventDTO.setId(entity.getId());
-        eventDTO.setCreatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(entity.getCreatedAt().getTime()), ZoneId.systemDefault()));
+        eventDTO.setCreatedAt(DateUtil.format(entity.getCreatedAt()));
         eventDTO.setEventClass(entity.getEventClass());
         eventDTO.setData(entity.getEventData());
         eventDTO.setUuid(entity.getUuid());

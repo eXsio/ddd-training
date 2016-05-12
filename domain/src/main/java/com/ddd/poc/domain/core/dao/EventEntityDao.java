@@ -6,8 +6,8 @@ import org.springframework.data.repository.Repository;
 
 import java.util.Collection;
 
-public interface EventEntityDao extends DomainDao<EventEntity>, Repository<EventEntity, Long> {
+public interface EventEntityDao extends BaseEntityDao<EventEntity>, Repository<EventEntity, Long> {
 
-    @Query("select e from EventEntity e order by e.createdAt desc")
+    @Query("select e from EventEntity e order by e.createdAt asc")
     Collection<EventEntity> findAllOrderByCreatedAt();
 }

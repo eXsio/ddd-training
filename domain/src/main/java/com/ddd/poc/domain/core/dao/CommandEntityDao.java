@@ -7,9 +7,9 @@ import org.springframework.data.repository.Repository;
 import java.util.Collection;
 import java.util.Optional;
 
-public interface CommandEntityDao extends DomainDao<CommandEntity>, Repository<CommandEntity, Long> {
+public interface CommandEntityDao extends BaseEntityDao<CommandEntity>, Repository<CommandEntity, Long> {
 
-    @Query("select c from CommandEntity c order by c.createdAt desc")
+    @Query("select c from CommandEntity c order by c.createdAt asc")
     Collection<CommandEntity> findAllOrderByCreatedAt();
 
     Optional<CommandEntity> findOneByUuid(String uuid);

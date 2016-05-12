@@ -1,13 +1,15 @@
 package com.ddd.poc.domain.core.dto;
 
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.Collection;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommandDTO {
 
     private Long id;
 
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     private String commandClass;
 
@@ -25,11 +27,11 @@ public class CommandDTO {
         this.id = id;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
