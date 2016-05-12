@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.UUID;
 
 import static org.mockito.Mockito.when;
 import static org.testng.AssertJUnit.assertEquals;
@@ -25,13 +26,15 @@ public class EventDomainDaoTest {
 
     private EventDomainDao underTest;
 
+    private String uuid = UUID.randomUUID().toString();
+
     @BeforeMethod
     public void init() {
         MockitoAnnotations.initMocks(this);
-        CommandEntity commandEntity = new CommandEntity(TestCommand.class.getCanonicalName(), TestCommand.serialized("TEST_VALUE"));
+        CommandEntity commandEntity = new CommandEntity(TestCommand.class.getCanonicalName(), TestCommand.serialized("TEST_VALUE"), uuid);
         when(eventEntityDao.findAllOrderByCreatedAt()).thenReturn(Lists.newArrayList(
-                new EventEntity(commandEntity, TestEvent.class.getCanonicalName(), TestEvent.serialized("TEST_VALUE1")),
-                new EventEntity(commandEntity, TestEvent.class.getCanonicalName(), TestEvent.serialized("TEST_VALUE2"))
+                new EventEntity(commandEntity, TestEvent.serialized("TEST_VALUE1"), TestEvent.class.getCanonicalName(), uuid),
+                new EventEntity(commandEntity, TestEvent.serialized("TEST_VALUE2"), TestEvent.class.getCanonicalName(), uuid)
         ));
         underTest = new EventDomainDao(eventEntityDao);
     }
@@ -51,7 +54,7 @@ public class EventDomainDaoTest {
 
     @Test
     public void test_create() {
-        CommandEntity commandEntity = new CommandEntity(TestCommand.class.getCanonicalName(), TestCommand.serialized("TEST_VALUE"));
+        CommandEntity commandEntity = new CommandEntity(TestCommand.class.getCanonicalName(), TestCommand.serialized("TEST_VALUE"), uuid);
         EventDM<TestEvent> result = underTest.create(new TestEvent("TEST_VALUE"), commandEntity);
         assertNotNull(result);
         assertEquals(result.getData(), new TestEvent("TEST_VALUE"));

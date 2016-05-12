@@ -12,6 +12,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "commands")
@@ -31,6 +32,9 @@ public class CommandEntity {
     @Column(nullable = false, updatable = false)
     private String commandClass;
 
+    @Column(nullable = false, updatable = false, unique = true)
+    private String uuid;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "command")
     private Collection<EventEntity> events;
 
@@ -38,9 +42,10 @@ public class CommandEntity {
 
     }
 
-    public CommandEntity(String commandData, String commandClass) {
+    public CommandEntity(String commandData, String commandClass, String uuid) {
         this.commandData = commandData;
         this.commandClass = commandClass;
+        this.uuid = uuid;
     }
 
     public Long getId() {
@@ -61,5 +66,33 @@ public class CommandEntity {
 
     public Collection<EventEntity> getEvents() {
         return events;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CommandEntity)) return false;
+        CommandEntity that = (CommandEntity) o;
+        return Objects.equals(uuid, that.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid);
+    }
+
+    @Override
+    public String toString() {
+        return "CommandEntity{" +
+                "id=" + id +
+                ", createdAt=" + createdAt +
+                ", commandData='" + commandData + '\'' +
+                ", commandClass='" + commandClass + '\'' +
+                ", uuid='" + uuid + '\'' +
+                '}';
     }
 }

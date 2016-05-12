@@ -11,6 +11,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class EventBus {
 
@@ -29,12 +31,22 @@ public class EventBus {
     @Transactional
     public void publishEvent(DomainEvent event, DomainCommand sourceCommand) {
         try {
-            CommandDM commandDM = commandDomainDao.create(sourceCommand);
-            commandDM.save();
+            CommandDM commandDM = getOrCreate(sourceCommand);
             commandDM.createEvent(event).save();
             publisher.publishEvent(event);
         } catch (Exception ex) {
             LOGGER.error("An error occurred during event publishing, event: {}, exception: {}", event, ex.getMessage(), ex);
+        }
+    }
+
+    private CommandDM getOrCreate(DomainCommand command) {
+        Optional<CommandDM> commandDM = commandDomainDao.findByUuid(command.getUuid().toString());
+        if (commandDM.isPresent()) {
+            return commandDM.get();
+        } else {
+            CommandDM newCommandDM = commandDomainDao.create(command);
+            newCommandDM.save();
+            return newCommandDM;
         }
     }
 }

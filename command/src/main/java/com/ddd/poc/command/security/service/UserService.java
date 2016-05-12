@@ -68,16 +68,18 @@ public class UserService {
 
     private void createGroupsIfNeeded(UserDTO userDTO, DomainCommand command) {
         for (String groupName : userDTO.getGroups()) {
-            if (groupEntityDao.findByName(groupName) == null) {
+            if (!groupEntityDao.findByName(groupName).isPresent()) {
                 eventBus.publishEvent(new GroupCreatedEvent(groupName), command);
             }
         }
     }
 
     private void updateGroups(UserDTO data, DomainCommand command) {
-        UserEntity userEntity = userEntityDao.findOne(data.getId());
-        removeDeletedGroups(userEntity, data.getGroups(), command);
-        addNewGroups(userEntity, data.getGroups(), command);
+        Optional<UserEntity> userEntity = userEntityDao.findOneByUsername(data.getUsername());
+        userEntity.ifPresent(userEntityObj -> {
+            removeDeletedGroups(userEntityObj, data.getGroups(), command);
+            addNewGroups(userEntityObj, data.getGroups(), command);
+        });
     }
 
     private void removeDeletedGroups(UserEntity userEntity, Collection<String> groups, DomainCommand command) {

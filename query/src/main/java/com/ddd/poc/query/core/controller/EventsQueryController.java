@@ -39,6 +39,7 @@ public class EventsQueryController {
         eventDTO.setCreatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(entity.getCreatedAt().getTime()), ZoneId.systemDefault()));
         eventDTO.setEventClass(entity.getEventClass());
         eventDTO.setData(entity.getEventData());
+        eventDTO.setUuid(entity.getUuid());
         CommandEntity commandEntity = entity.getCommand();
         eventDTO.setCommand(new CommandDTO() {
             {
@@ -46,6 +47,7 @@ public class EventsQueryController {
                 setData(commandEntity.getCommandData());
                 setCreatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(commandEntity.getCreatedAt().getTime()), ZoneId.systemDefault()));
                 setId(commandEntity.getId());
+                setUuid(commandEntity.getUuid());
 
             }
         });

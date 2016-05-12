@@ -4,7 +4,7 @@ import com.ddd.poc.domain.core.command.DomainCommand;
 import com.ddd.poc.domain.core.event.DomainEvent;
 import com.ddd.poc.domain.security.dto.UserDTO;
 
-public class UserCreatedEvent implements DomainEvent {
+public class UserCreatedEvent extends DomainEvent {
 
     private final UserDTO userDTO;
 

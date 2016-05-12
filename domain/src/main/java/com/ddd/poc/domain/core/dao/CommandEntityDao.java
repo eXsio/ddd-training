@@ -11,4 +11,6 @@ public interface CommandEntityDao extends JpaRepository<CommandEntity, Long> {
 
     @Query("select c from CommandEntity c order by c.createdAt desc")
     Collection<CommandEntity> findAllOrderByCreatedAt();
+
+    CommandEntity findByUuid(String uuid);
 }

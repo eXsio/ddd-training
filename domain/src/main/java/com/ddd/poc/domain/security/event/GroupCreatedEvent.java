@@ -2,7 +2,7 @@ package com.ddd.poc.domain.security.event;
 
 import com.ddd.poc.domain.core.event.DomainEvent;
 
-public class GroupCreatedEvent implements DomainEvent {
+public class GroupCreatedEvent extends DomainEvent {
 
     private final String name;
 

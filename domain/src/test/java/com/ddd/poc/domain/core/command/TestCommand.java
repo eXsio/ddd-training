@@ -4,7 +4,7 @@ import com.ddd.poc.domain.core.event.DomainEvent;
 
 import java.util.Objects;
 
-public final class TestCommand implements DomainCommand {
+public final class TestCommand extends DomainCommand {
 
     private String testField;
 

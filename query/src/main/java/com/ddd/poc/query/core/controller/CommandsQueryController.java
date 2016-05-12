@@ -40,6 +40,7 @@ public class CommandsQueryController {
         commandDTO.setCommandClass(entity.getCommandClass());
         commandDTO.setData(entity.getCommandData());
         commandDTO.setEvents(entity.getEvents().stream().map(this::getEventDTO).collect(Collectors.toList()));
+        commandDTO.setUuid(entity.getUuid());
         return commandDTO;
     }
 
@@ -49,6 +50,7 @@ public class CommandsQueryController {
         eventDTO.setCreatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(entity.getCreatedAt().getTime()), ZoneId.systemDefault()));
         eventDTO.setEventClass(entity.getEventClass());
         eventDTO.setData(entity.getEventData());
+        eventDTO.setUuid(entity.getUuid());
         return eventDTO;
     }
 }

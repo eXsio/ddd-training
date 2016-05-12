@@ -2,7 +2,7 @@ package com.ddd.poc.domain.security.event;
 
 import com.ddd.poc.domain.core.event.DomainEvent;
 
-public class UserJoinedGroupEvent implements DomainEvent {
+public class UserJoinedGroupEvent extends DomainEvent {
 
     private final Long userId;
 

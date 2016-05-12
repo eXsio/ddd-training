@@ -2,7 +2,7 @@ package com.ddd.poc.domain.core.event;
 
 import java.util.Objects;
 
-public final class TestEvent implements DomainEvent {
+public final class TestEvent extends DomainEvent {
 
     private String testField;
 

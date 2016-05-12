@@ -13,6 +13,8 @@ public class CommandDTO {
 
     private String data;
 
+    private String uuid;
+
     private Collection<EventDTO> events;
 
     public Long getId() {
@@ -53,5 +55,13 @@ public class CommandDTO {
 
     public void setEvents(Collection<EventDTO> events) {
         this.events = events;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

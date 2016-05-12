@@ -2,7 +2,7 @@ package com.ddd.poc.command.security.command;
 
 import com.ddd.poc.domain.core.command.DomainCommand;
 
-public class UpdateGroupCommand implements DomainCommand {
+public class UpdateGroupCommand extends DomainCommand {
 
     private final Long groupId;
 

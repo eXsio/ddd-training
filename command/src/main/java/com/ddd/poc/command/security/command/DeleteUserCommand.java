@@ -2,7 +2,7 @@ package com.ddd.poc.command.security.command;
 
 import com.ddd.poc.domain.core.command.DomainCommand;
 
-public class DeleteUserCommand implements DomainCommand {
+public class DeleteUserCommand extends DomainCommand {
 
     private final Long userId;
 

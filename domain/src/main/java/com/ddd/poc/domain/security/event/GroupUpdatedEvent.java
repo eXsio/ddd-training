@@ -3,7 +3,7 @@ package com.ddd.poc.domain.security.event;
 import com.ddd.poc.domain.core.command.DomainCommand;
 import com.ddd.poc.domain.core.event.DomainEvent;
 
-public class GroupUpdatedEvent implements DomainEvent {
+public class GroupUpdatedEvent extends DomainEvent {
 
     private final Long groupId;
 

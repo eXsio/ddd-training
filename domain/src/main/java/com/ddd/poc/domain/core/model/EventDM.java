@@ -13,8 +13,8 @@ public class EventDM<T extends DomainEvent> {
 
     private final EventEntityDao eventEntityDao;
 
-    public EventDM(T data, CommandEntity commandEntity, EventEntityDao eventEntityDao) {
-        this(new EventEntity(commandEntity, DataConverter.toString(data), data.getClass().getCanonicalName()), eventEntityDao);
+    public EventDM(T event, CommandEntity commandEntity, EventEntityDao eventEntityDao) {
+        this(new EventEntity(commandEntity, DataConverter.toString(event), event.getClass().getCanonicalName(), event.getUuid().toString()), eventEntityDao);
     }
 
     public EventDM(EventEntity entity, EventEntityDao eventEntityDao) {

@@ -3,7 +3,7 @@ package com.ddd.poc.command.security.command;
 import com.ddd.poc.domain.core.command.DomainCommand;
 import com.ddd.poc.domain.security.dto.UserDTO;
 
-public class DeleteGroupCommand implements DomainCommand {
+public class DeleteGroupCommand extends DomainCommand {
 
     private final Long groupId;
 

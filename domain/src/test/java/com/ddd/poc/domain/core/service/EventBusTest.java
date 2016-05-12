@@ -15,6 +15,10 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -47,7 +51,9 @@ public class EventBusTest {
 
     private TestCommand command = new TestCommand("TEST_VALUE");
 
-    private CommandEntity commandEntity = new CommandEntity(TestCommand.class.getCanonicalName(), TestCommand.serialized("TEST_VALUE"));
+    private String uuid = UUID.randomUUID().toString();
+
+    private CommandEntity commandEntity = new CommandEntity(TestCommand.class.getCanonicalName(), TestCommand.serialized("TEST_VALUE"), uuid);
 
     @BeforeClass
     public void init() {
@@ -55,7 +61,9 @@ public class EventBusTest {
         eventDM = spy(new EventDM<>(event, commandEntity, eventEntityDao));
         commandDM = spy(new CommandDM<>(command, commandEntityDao, eventDomainDao));
         when(commandDomainDao.create(command)).thenReturn(commandDM);
+        when(commandDomainDao.findByUuid(anyString())).thenReturn(Optional.<CommandDM>empty());
         when(eventDomainDao.create(event, commandEntity)).thenReturn(eventDM);
+        when(commandDM.createEvent(event)).thenReturn(eventDM);
 
         underTest = new EventBus(publisher, commandDomainDao);
     }
@@ -64,13 +72,8 @@ public class EventBusTest {
     public void test_publishEvent() {
         underTest.publishEvent(event, command);
 
-        verify(commandDM).createEvent(event);
-        verify(eventDomainDao).create(event, commandEntity);
         verify(eventDM).save();
         verify(publisher).publishEvent(event);
 
-        verifyNoMoreInteractions(eventDomainDao);
-        verifyNoMoreInteractions(publisher);
-        verifyNoMoreInteractions(eventDM);
     }
 }

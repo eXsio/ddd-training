@@ -2,11 +2,11 @@ package com.ddd.poc.domain.core.dao;
 
 import com.ddd.poc.domain.core.command.DomainCommand;
 import com.ddd.poc.domain.core.model.CommandDM;
+import com.ddd.poc.domain.core.model.CommandEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 public class CommandDomainDao {
@@ -21,8 +21,9 @@ public class CommandDomainDao {
         this.eventDomainDao = eventDomainDao;
     }
 
-    public Collection<CommandDM> findAll() {
-        return commandEntityDao.findAllOrderByCreatedAt().stream().map(commandEntity -> new CommandDM(commandEntity, commandEntityDao, eventDomainDao)).collect(Collectors.toList());
+    public Optional<CommandDM> findByUuid(String uuid) {
+        CommandEntity commandEntity = commandEntityDao.findByUuid(uuid);
+        return commandEntity != null ? Optional.of(new CommandDM(commandEntity, commandEntityDao, eventDomainDao)) : Optional.<CommandDM>empty();
     }
 
     public <T extends DomainCommand> CommandDM<T> create(T command) {

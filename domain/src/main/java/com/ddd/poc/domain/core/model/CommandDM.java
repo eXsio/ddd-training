@@ -9,6 +9,8 @@ import com.ddd.poc.domain.core.service.DataConverter;
 import com.google.common.base.Preconditions;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 public class CommandDM<C extends DomainCommand> {
 
     private final CommandEntity entity;
@@ -18,7 +20,7 @@ public class CommandDM<C extends DomainCommand> {
     private final EventDomainDao eventDomainDao;
 
     public CommandDM(C command, CommandEntityDao commandEntityDao, EventDomainDao eventDomainDao) {
-        this(new CommandEntity(DataConverter.toString(command), command.getClass().getCanonicalName()), commandEntityDao, eventDomainDao);
+        this(new CommandEntity(DataConverter.toString(command), command.getClass().getCanonicalName(), command.getUuid().toString()), commandEntityDao, eventDomainDao);
     }
 
     public CommandDM(CommandEntity entity, CommandEntityDao commandEntityDao, EventDomainDao eventDomainDao) {

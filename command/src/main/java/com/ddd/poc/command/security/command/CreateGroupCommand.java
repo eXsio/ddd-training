@@ -2,7 +2,7 @@ package com.ddd.poc.command.security.command;
 
 import com.ddd.poc.domain.core.command.DomainCommand;
 
-public class CreateGroupCommand implements DomainCommand {
+public class CreateGroupCommand extends DomainCommand {
 
     private final String name;
 
