@@ -1,5 +1,7 @@
 package com.ddd.poc.domain.core.dao;
 
+import com.ddd.poc.domain.core.event.DomainEvent;
+import com.ddd.poc.domain.core.model.CommandEntity;
 import com.ddd.poc.domain.core.model.EventDM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,7 @@ public class EventDomainDao {
         return eventEntityDao.findAllOrderByCreatedAt().stream().map(eventEntity -> new EventDM<>(eventEntity, eventEntityDao)).collect(Collectors.toList());
     }
 
-    public <T> EventDM<T> create(T data) {
-        return new EventDM<>(data, eventEntityDao);
+    public <E extends DomainEvent> EventDM<E> create(E event, CommandEntity commandEntity) {
+        return new EventDM<>(event, commandEntity, eventEntityDao);
     }
 }

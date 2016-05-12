@@ -1,18 +1,19 @@
 package com.ddd.poc.domain.core.dto;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
-public class EventDTO {
+public class CommandDTO {
 
     private Long id;
 
     private LocalDateTime createdAt;
 
-    private String eventClass;
+    private String commandClass;
 
     private String data;
 
-    private CommandDTO command;
+    private Collection<EventDTO> events;
 
     public Long getId() {
         return id;
@@ -30,12 +31,12 @@ public class EventDTO {
         this.createdAt = createdAt;
     }
 
-    public String getEventClass() {
-        return eventClass;
+    public String getCommandClass() {
+        return commandClass;
     }
 
-    public void setEventClass(String eventClass) {
-        this.eventClass = eventClass;
+    public void setCommandClass(String commandClass) {
+        this.commandClass = commandClass;
     }
 
     public String getData() {
@@ -46,11 +47,11 @@ public class EventDTO {
         this.data = data;
     }
 
-    public CommandDTO getCommand() {
-        return command;
+    public Collection<EventDTO> getEvents() {
+        return events;
     }
 
-    public void setCommand(CommandDTO command) {
-        this.command = command;
+    public void setEvents(Collection<EventDTO> events) {
+        this.events = events;
     }
 }

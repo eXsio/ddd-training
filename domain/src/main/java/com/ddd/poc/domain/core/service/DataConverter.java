@@ -1,6 +1,6 @@
 package com.ddd.poc.domain.core.service;
 
-import com.ddd.poc.domain.core.ex.EventDataConversionRuntimeException;
+import com.ddd.poc.domain.core.ex.DataConversionRuntimeException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +26,7 @@ public class DataConverter {
         try {
             return MAPPER.writeValueAsString(object);
         } catch (JsonProcessingException ex) {
-            throw new EventDataConversionRuntimeException(ex);
+            throw new DataConversionRuntimeException(ex);
         }
     }
 
@@ -34,7 +34,7 @@ public class DataConverter {
         try {
             return MAPPER.readValue(data, dataClass);
         } catch (IOException ex) {
-            throw new EventDataConversionRuntimeException(ex);
+            throw new DataConversionRuntimeException(ex);
         }
     }
 }

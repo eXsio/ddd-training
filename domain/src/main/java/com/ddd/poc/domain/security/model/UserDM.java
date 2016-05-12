@@ -6,7 +6,6 @@ import com.ddd.poc.domain.security.dto.UserDTO;
 import com.google.common.base.Preconditions;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -69,7 +68,7 @@ public class UserDM {
     private void addNewGroups(UserDTO data) {
         for (String groupName : data.getGroups()) {
             Optional<GroupEntity> group = groupEntityDao.findByName(groupName);
-            if(!group.isPresent()) {
+            if (!group.isPresent()) {
                 group = Optional.ofNullable(groupEntityDao.save(new GroupEntity(groupName)));
             }
             group.ifPresent(entity::addGroup);

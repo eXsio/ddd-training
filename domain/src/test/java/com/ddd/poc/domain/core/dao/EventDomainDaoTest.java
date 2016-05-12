@@ -1,7 +1,9 @@
 package com.ddd.poc.domain.core.dao;
 
 import com.beust.jcommander.internal.Lists;
+import com.ddd.poc.domain.core.command.TestCommand;
 import com.ddd.poc.domain.core.event.TestEvent;
+import com.ddd.poc.domain.core.model.CommandEntity;
 import com.ddd.poc.domain.core.model.EventDM;
 import com.ddd.poc.domain.core.model.EventEntity;
 import org.mockito.Mock;
@@ -26,9 +28,10 @@ public class EventDomainDaoTest {
     @BeforeMethod
     public void init() {
         MockitoAnnotations.initMocks(this);
+        CommandEntity commandEntity = new CommandEntity(TestCommand.class.getCanonicalName(), TestCommand.serialized("TEST_VALUE"));
         when(eventEntityDao.findAllOrderByCreatedAt()).thenReturn(Lists.newArrayList(
-                new EventEntity(TestEvent.class.getCanonicalName(), TestEvent.serialized("TEST_VALUE1")),
-                new EventEntity(TestEvent.class.getCanonicalName(), TestEvent.serialized("TEST_VALUE2"))
+                new EventEntity(commandEntity, TestEvent.class.getCanonicalName(), TestEvent.serialized("TEST_VALUE1")),
+                new EventEntity(commandEntity, TestEvent.class.getCanonicalName(), TestEvent.serialized("TEST_VALUE2"))
         ));
         underTest = new EventDomainDao(eventEntityDao);
     }
@@ -48,13 +51,14 @@ public class EventDomainDaoTest {
 
     @Test
     public void test_create() {
-        EventDM<TestEvent> result = underTest.create(new TestEvent("TEST_VALUE"));
+        CommandEntity commandEntity = new CommandEntity(TestCommand.class.getCanonicalName(), TestCommand.serialized("TEST_VALUE"));
+        EventDM<TestEvent> result = underTest.create(new TestEvent("TEST_VALUE"), commandEntity);
         assertNotNull(result);
         assertEquals(result.getData(), new TestEvent("TEST_VALUE"));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void test_create_null_data() {
-        underTest.create(null);
+        underTest.create(null, null);
     }
 }

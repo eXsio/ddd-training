@@ -1,5 +1,6 @@
 package com.ddd.poc.domain.core.model;
 
+import com.ddd.poc.domain.core.command.TestCommand;
 import com.ddd.poc.domain.core.dao.EventEntityDao;
 import com.ddd.poc.domain.core.event.TestEvent;
 import org.mockito.ArgumentCaptor;
@@ -29,7 +30,8 @@ public class EventDMTest {
 
         TestEvent event = new TestEvent();
         event.setTestField(TEST_VALUE);
-        EventDM<TestEvent> result = new EventDM<>(event, eventEntityDao);
+        CommandEntity commandEntity = new CommandEntity(TestCommand.class.getCanonicalName(), TestCommand.serialized(TEST_VALUE));
+        EventDM<TestEvent> result = new EventDM<>(event, commandEntity, eventEntityDao);
 
         assertEquals(result.getEventClass(), TestEvent.class);
         assertEquals(result.getData(), event);
@@ -41,7 +43,7 @@ public class EventDMTest {
 
         EventEntity entity = eventEntityArgumentCaptor.getValue();
         assertEquals(entity.getEventClass(), TestEvent.class.getCanonicalName());
-        assertEquals(entity.getData(), TestEvent.serialized("TEST_VALUE"));
+        assertEquals(entity.getEventData(), TestEvent.serialized("TEST_VALUE"));
         assertNotNull(entity.getCreatedAt());
     }
 
@@ -50,8 +52,8 @@ public class EventDMTest {
 
         TestEvent event = new TestEvent();
         event.setTestField(TEST_VALUE);
-
-        EventEntity entity = new EventEntity(TestEvent.class.getCanonicalName(), TestEvent.serialized("TEST_VALUE"));
+        CommandEntity commandEntity = new CommandEntity(TestCommand.class.getCanonicalName(), TestCommand.serialized(TEST_VALUE));
+        EventEntity entity = new EventEntity(commandEntity, TestEvent.class.getCanonicalName(), TestEvent.serialized("TEST_VALUE"));
         EventDM<TestEvent> result = new EventDM<>(entity, eventEntityDao);
 
         assertEquals(result.getEventClass(), TestEvent.class);
@@ -64,7 +66,7 @@ public class EventDMTest {
 
         entity = eventEntityArgumentCaptor.getValue();
         assertEquals(entity.getEventClass(), TestEvent.class.getCanonicalName());
-        assertEquals(entity.getData(), TestEvent.serialized("TEST_VALUE"));
+        assertEquals(entity.getEventData(), TestEvent.serialized("TEST_VALUE"));
         assertNotNull(entity.getCreatedAt());
     }
 

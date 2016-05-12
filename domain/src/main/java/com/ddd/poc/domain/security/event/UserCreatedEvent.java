@@ -1,13 +1,14 @@
-package com.ddd.poc.command.security.event;
+package com.ddd.poc.domain.security.event;
 
+import com.ddd.poc.domain.core.command.DomainCommand;
 import com.ddd.poc.domain.core.event.DomainEvent;
 import com.ddd.poc.domain.security.dto.UserDTO;
 
-public class UserUpdatedEvent implements DomainEvent {
+public class UserCreatedEvent implements DomainEvent {
 
     private final UserDTO userDTO;
 
-    public UserUpdatedEvent(UserDTO userDTO) {
+    public UserCreatedEvent(UserDTO userDTO) {
         this.userDTO = userDTO;
     }
 

@@ -1,7 +1,7 @@
 package com.ddd.poc.query.core.controller;
 
 import com.ddd.poc.domain.api.RestUrls;
-import com.ddd.poc.domain.core.dao.EventEntityDao;
+import com.ddd.poc.domain.core.dao.CommandEntityDao;
 import com.ddd.poc.domain.core.dto.CommandDTO;
 import com.ddd.poc.domain.core.dto.EventDTO;
 import com.ddd.poc.domain.core.model.CommandEntity;
@@ -18,19 +18,29 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(RestUrls.EVENTS)
-public class EventsQueryController {
+@RequestMapping(RestUrls.COMMANDS)
+public class CommandsQueryController {
 
-    private final EventEntityDao eventEntityDao;
+    private final CommandEntityDao eventEntityDao;
 
     @Autowired
-    public EventsQueryController(EventEntityDao eventEntityDao) {
+    public CommandsQueryController(CommandEntityDao eventEntityDao) {
         this.eventEntityDao = eventEntityDao;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public Collection<EventDTO> getEvents() {
-        return eventEntityDao.findAllOrderByCreatedAt().stream().map(this::getEventDTO).collect(Collectors.toList());
+    public Collection<CommandDTO> getCommands() {
+        return eventEntityDao.findAllOrderByCreatedAt().stream().map(this::getCommandDTO).collect(Collectors.toList());
+    }
+
+    protected CommandDTO getCommandDTO(CommandEntity entity) {
+        CommandDTO commandDTO = new CommandDTO();
+        commandDTO.setId(entity.getId());
+        commandDTO.setCreatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(entity.getCreatedAt().getTime()), ZoneId.systemDefault()));
+        commandDTO.setCommandClass(entity.getCommandClass());
+        commandDTO.setData(entity.getCommandData());
+        commandDTO.setEvents(entity.getEvents().stream().map(this::getEventDTO).collect(Collectors.toList()));
+        return commandDTO;
     }
 
     protected EventDTO getEventDTO(EventEntity entity) {
@@ -39,16 +49,6 @@ public class EventsQueryController {
         eventDTO.setCreatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(entity.getCreatedAt().getTime()), ZoneId.systemDefault()));
         eventDTO.setEventClass(entity.getEventClass());
         eventDTO.setData(entity.getEventData());
-        CommandEntity commandEntity = entity.getCommand();
-        eventDTO.setCommand(new CommandDTO() {
-            {
-                setCommandClass(commandEntity.getCommandClass());
-                setData(commandEntity.getCommandData());
-                setCreatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(commandEntity.getCreatedAt().getTime()), ZoneId.systemDefault()));
-                setId(commandEntity.getId());
-
-            }
-        });
         return eventDTO;
     }
 }

@@ -1,11 +1,11 @@
 package com.ddd.poc.domain.security.dao;
 
 import com.ddd.poc.domain.security.model.UserDM;
+import com.ddd.poc.domain.security.model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 public class UserDomainDao {
@@ -20,12 +20,9 @@ public class UserDomainDao {
         this.groupEntityDao = groupEntityDao;
     }
 
-    public Collection<UserDM> find(Collection<Long> ids) {
-        return userEntityDao.findAll(ids).stream().map(userEntity -> new UserDM(userEntity, userEntityDao, groupEntityDao)).collect(Collectors.toList());
-    }
-
-    public UserDM find(Long id) {
-        return new UserDM(userEntityDao.findOne(id), userEntityDao, groupEntityDao);
+    public Optional<UserDM> find(Long id) {
+        UserEntity userEntity = userEntityDao.findOne(id);
+        return userEntity != null ? Optional.of(new UserDM(userEntity, userEntityDao, groupEntityDao)) : Optional.<UserDM>empty();
     }
 
     public UserDM create() {

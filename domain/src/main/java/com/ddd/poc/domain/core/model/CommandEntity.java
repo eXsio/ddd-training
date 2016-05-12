@@ -6,16 +6,16 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
-@Table(name = "events")
-public class EventEntity {
+@Table(name = "commands")
+public class CommandEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,23 +26,21 @@ public class EventEntity {
     private Date createdAt = new Date();
 
     @Column(nullable = false, updatable = false)
-    private String eventClass;
+    private String commandData;
 
     @Column(nullable = false, updatable = false)
-    private String eventData;
+    private String commandClass;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "commandId")
-    private CommandEntity command;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "command")
+    private Collection<EventEntity> events;
 
-    EventEntity() {
+    CommandEntity() {
 
     }
 
-    public EventEntity(CommandEntity command, String eventData, String eventClass) {
-        this.command = command;
-        this.eventClass = eventClass;
-        this.eventData = eventData;
+    public CommandEntity(String commandData, String commandClass) {
+        this.commandData = commandData;
+        this.commandClass = commandClass;
     }
 
     public Long getId() {
@@ -53,15 +51,15 @@ public class EventEntity {
         return createdAt;
     }
 
-    public String getEventClass() {
-        return eventClass;
+    public String getCommandData() {
+        return commandData;
     }
 
-    public String getEventData() {
-        return eventData;
+    public String getCommandClass() {
+        return commandClass;
     }
 
-    public CommandEntity getCommand() {
-        return command;
+    public Collection<EventEntity> getEvents() {
+        return events;
     }
 }
