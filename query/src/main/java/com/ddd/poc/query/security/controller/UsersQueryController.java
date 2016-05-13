@@ -1,7 +1,7 @@
 package com.ddd.poc.query.security.controller;
 
 import com.ddd.poc.domain.api.RestUrls;
-import com.ddd.poc.domain.security.repository.UserEntityRepository;
+import com.ddd.poc.domain.security.dao.UserDao;
 import com.ddd.poc.domain.security.dto.UserDTO;
 import com.ddd.poc.domain.security.model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
 @RequestMapping(RestUrls.USERS)
 public class UsersQueryController {
 
-    private final UserEntityRepository userEntityDao;
+    private final UserDao userEntityDao;
 
     @Autowired
-    public UsersQueryController(UserEntityRepository userEntityDao) {
+    public UsersQueryController(UserDao userEntityDao) {
         this.userEntityDao = userEntityDao;
     }
 

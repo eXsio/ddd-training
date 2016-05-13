@@ -1,31 +1,17 @@
 package com.ddd.poc.domain.core.model;
 
-import com.ddd.poc.domain.core.repository.EventEntityRepository;
 import com.ddd.poc.domain.core.event.DomainEvent;
 import com.ddd.poc.domain.core.ex.ClassNotFoundRuntimeException;
 import com.ddd.poc.domain.core.util.DataConverter;
-import com.google.common.base.Preconditions;
-import org.springframework.transaction.annotation.Transactional;
 
 public class EventDM<T extends DomainEvent> extends BaseAggregate<EventEntity> {
 
-
-    private final EventEntityRepository eventEntityRepository;
-
-    public EventDM(T event, CommandEntity commandEntity, EventEntityRepository eventEntityRepository) {
-        this(new EventEntity(commandEntity, DataConverter.toString(event), event.getClass().getCanonicalName(), event.getUuid().toString()), eventEntityRepository);
+    public EventDM(T event, CommandEntity commandEntity) {
+        this(new EventEntity(commandEntity, DataConverter.toString(event), event.getClass().getCanonicalName(), event.getUuid().toString()));
     }
 
-    public EventDM(EventEntity entity, EventEntityRepository eventEntityRepository) {
+    public EventDM(EventEntity entity) {
         super(entity);
-        Preconditions.checkNotNull(eventEntityRepository);
-        this.eventEntityRepository = eventEntityRepository;
-    }
-
-    @Transactional
-    public EventDM save() {
-        eventEntityRepository.save(entity);
-        return this;
     }
 
     public Class<T> getEventClass() {
@@ -38,5 +24,10 @@ public class EventDM<T extends DomainEvent> extends BaseAggregate<EventEntity> {
 
     public T getData() {
         return DataConverter.toObject(entity.getEventData(), getEventClass());
+    }
+
+    @Override
+    protected EventEntity getEntity() {
+        return entity;
     }
 }

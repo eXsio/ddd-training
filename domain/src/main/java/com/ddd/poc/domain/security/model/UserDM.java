@@ -2,66 +2,54 @@ package com.ddd.poc.domain.security.model;
 
 import com.ddd.poc.domain.core.model.BaseAggregate;
 import com.ddd.poc.domain.security.dto.UserDTO;
-import com.ddd.poc.domain.security.repository.GroupEntityRepository;
-import com.ddd.poc.domain.security.repository.UserEntityRepository;
+import com.ddd.poc.domain.security.dao.GroupDao;
+import com.ddd.poc.domain.security.dao.UserDao;
 import com.google.common.base.Preconditions;
 import org.springframework.transaction.annotation.Transactional;
 
 public class UserDM extends BaseAggregate<UserEntity> {
 
-    private final UserEntityRepository userEntityRepository;
+    private final GroupDao groupDao;
 
-    private final GroupEntityRepository groupEntityRepository;
-
-    public UserDM(UserEntityRepository userEntityRepository, GroupEntityRepository groupEntityRepository) {
-        this(new UserEntity(), userEntityRepository, groupEntityRepository);
+    public UserDM(GroupDao groupDao) {
+        this(new UserEntity(), groupDao);
     }
 
-    public UserDM(UserEntity entity, UserEntityRepository userEntityRepository, GroupEntityRepository groupEntityRepository) {
+    public UserDM(UserEntity entity, GroupDao groupDao) {
         super(entity);
-        Preconditions.checkNotNull(userEntityRepository);
-        Preconditions.checkNotNull(groupEntityRepository);
-
-        this.userEntityRepository = userEntityRepository;
-        this.groupEntityRepository = groupEntityRepository;
+        Preconditions.checkNotNull(groupDao);
+        this.groupDao = groupDao;
     }
 
-    @Transactional
-    public UserDM save(UserDTO data) {
+    public UserDM update(UserDTO data) {
         Preconditions.checkNotNull(data);
         entity.setActive(data.isActive());
         entity.setPassword(encryptPassword(data.getPassword()));
         entity.setUsername(data.getUsername());
-        userEntityRepository.save(entity);
 
-        return this;
-    }
-
-    @Transactional
-    public UserDM delete() {
-        userEntityRepository.delete(entity);
         return this;
     }
 
     public UserDM joinGroup(Long groupId) {
-        groupEntityRepository.findOne(groupId).ifPresent(groupEntity -> {
+        groupDao.findOne(groupId).ifPresent(groupEntity -> {
             entity.addGroup(groupEntity);
-            userEntityRepository.save(entity);
         });
         return this;
     }
 
     public UserDM leaveGroup(Long groupId) {
-        groupEntityRepository.findOne(groupId).ifPresent(groupEntity -> {
+        groupDao.findOne(groupId).ifPresent(groupEntity -> {
             entity.removeGroup(groupEntity);
-            userEntityRepository.save(entity);
         });
         return this;
     }
-
 
     private String encryptPassword(String password) {
         return password;
     }
 
+    @Override
+    protected UserEntity getEntity() {
+        return entity;
+    }
 }

@@ -10,4 +10,6 @@ public abstract class BaseAggregate<T> {
         Preconditions.checkNotNull(entity);
         this.entity = entity;
     }
+
+    protected abstract T getEntity();
 }

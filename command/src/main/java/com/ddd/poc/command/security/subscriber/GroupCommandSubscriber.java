@@ -5,7 +5,7 @@ import com.ddd.poc.command.security.command.DeleteGroupCommand;
 import com.ddd.poc.command.security.command.UpdateGroupCommand;
 import com.ddd.poc.domain.core.command.DomainCommand;
 import com.ddd.poc.domain.core.service.EventBus;
-import com.ddd.poc.domain.security.repository.GroupEntityRepository;
+import com.ddd.poc.domain.security.dao.GroupDao;
 import com.ddd.poc.domain.security.event.GroupCreatedEvent;
 import com.ddd.poc.domain.security.event.GroupDeletedEvent;
 import com.ddd.poc.domain.security.event.GroupUpdatedEvent;
@@ -22,12 +22,12 @@ public class GroupCommandSubscriber {
 
     private final EventBus eventBus;
 
-    private final GroupEntityRepository groupEntityRepository;
+    private final GroupDao groupDao;
 
     @Autowired
-    public GroupCommandSubscriber(EventBus eventBus, GroupEntityRepository groupEntityRepository) {
+    public GroupCommandSubscriber(EventBus eventBus, GroupDao groupDao) {
         this.eventBus = eventBus;
-        this.groupEntityRepository = groupEntityRepository;
+        this.groupDao = groupDao;
     }
 
     @EventListener
@@ -56,7 +56,7 @@ public class GroupCommandSubscriber {
     }
 
     private void removeUsersFromGroup(DeleteGroupCommand command) {
-        groupEntityRepository.findOne(command.getGroupId()).ifPresent(groupEntity -> {
+        groupDao.findOne(command.getGroupId()).ifPresent(groupEntity -> {
             for (UserEntity userEntity : groupEntity.getUsers()) {
                 eventBus.publishEvent(new UserLeftGroupEvent(userEntity.getId(), groupEntity.getId()), command);
             }

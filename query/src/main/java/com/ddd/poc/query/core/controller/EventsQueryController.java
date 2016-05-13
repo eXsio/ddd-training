@@ -1,7 +1,7 @@
 package com.ddd.poc.query.core.controller;
 
 import com.ddd.poc.domain.api.RestUrls;
-import com.ddd.poc.domain.core.repository.EventEntityRepository;
+import com.ddd.poc.domain.core.dao.EventDao;
 import com.ddd.poc.domain.core.dto.CommandDTO;
 import com.ddd.poc.domain.core.dto.EventDTO;
 import com.ddd.poc.domain.core.model.CommandEntity;
@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
 @RequestMapping(RestUrls.EVENTS)
 public class EventsQueryController {
 
-    private final EventEntityRepository eventEntityDao;
+    private final EventDao eventEntityDao;
 
     @Autowired
-    public EventsQueryController(EventEntityRepository eventEntityDao) {
+    public EventsQueryController(EventDao eventEntityDao) {
         this.eventEntityDao = eventEntityDao;
     }
 

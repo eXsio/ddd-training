@@ -1,10 +1,10 @@
 package com.ddd.poc.domain.core.service;
 
 import com.ddd.poc.domain.core.command.TestCommand;
-import com.ddd.poc.domain.core.repository.CommandDomainRepository;
-import com.ddd.poc.domain.core.repository.CommandEntityRepository;
-import com.ddd.poc.domain.core.repository.EventDomainRepository;
-import com.ddd.poc.domain.core.repository.EventEntityRepository;
+import com.ddd.poc.domain.core.model.CommandRepository;
+import com.ddd.poc.domain.core.dao.CommandDao;
+import com.ddd.poc.domain.core.model.EventRepository;
+import com.ddd.poc.domain.core.dao.EventDao;
 import com.ddd.poc.domain.core.event.TestEvent;
 import com.ddd.poc.domain.core.model.CommandDM;
 import com.ddd.poc.domain.core.model.CommandEntity;
@@ -31,16 +31,16 @@ public class EventBusTest {
     private ApplicationEventPublisher publisher;
 
     @Mock
-    private EventEntityRepository eventEntityDao;
+    private EventDao eventDao;
 
     @Mock
-    private EventDomainRepository eventDomainDao;
+    private EventRepository eventRepository;
 
     @Mock
-    private CommandDomainRepository commandDomainDao;
+    private CommandRepository commandRepository;
 
     @Mock
-    private CommandEntityRepository commandEntityDao;
+    private CommandDao commandEntityDao;
 
     private EventDM<TestEvent> eventDM;
 
@@ -59,21 +59,21 @@ public class EventBusTest {
     @BeforeClass
     public void init() {
         MockitoAnnotations.initMocks(this);
-        eventDM = spy(new EventDM<>(event, commandEntity, eventEntityDao));
-        commandDM = spy(new CommandDM<>(command, commandEntityDao, eventDomainDao));
-        when(commandDomainDao.create(command)).thenReturn(commandDM);
-        when(commandDomainDao.findByUuid(anyString())).thenReturn(Optional.<CommandDM>empty());
-        when(eventDomainDao.create(event, commandEntity)).thenReturn(eventDM);
+        eventDM = spy(new EventDM<>(event, commandEntity));
+        commandDM = spy(new CommandDM<>(command, eventRepository));
+        when(commandRepository.create(command)).thenReturn(commandDM);
+        when(commandRepository.findByUuid(anyString())).thenReturn(Optional.of(commandDM));
+        when(eventRepository.create(event, commandEntity)).thenReturn(eventDM);
         when(commandDM.createEvent(event)).thenReturn(eventDM);
 
-        underTest = new EventBusImpl(new JpaEventStoreImpl(commandDomainDao), new SpringDispatcherEventQueueImpl(publisher));
+        underTest = new EventBusImpl(new JpaEventStoreImpl(commandRepository, eventRepository), new SpringDispatcherEventQueueImpl(publisher));
     }
 
     @Test
     public void test_publishEvent() {
         underTest.publishEvent(event, command);
 
-        verify(eventDM).save();
+        verify(eventRepository).save(eventDM);
         verify(publisher).publishEvent(event);
 
     }

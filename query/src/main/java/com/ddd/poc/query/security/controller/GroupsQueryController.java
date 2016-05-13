@@ -1,7 +1,7 @@
 package com.ddd.poc.query.security.controller;
 
 import com.ddd.poc.domain.api.RestUrls;
-import com.ddd.poc.domain.security.repository.GroupEntityRepository;
+import com.ddd.poc.domain.security.dao.GroupDao;
 import com.ddd.poc.domain.security.dto.GroupDTO;
 import com.ddd.poc.domain.security.model.GroupEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
 @RequestMapping(RestUrls.GROUPS)
 public class GroupsQueryController {
 
-    private final GroupEntityRepository groupEntityDao;
+    private final GroupDao groupEntityDao;
 
     @Autowired
-    public GroupsQueryController(GroupEntityRepository groupEntityDao) {
+    public GroupsQueryController(GroupDao groupEntityDao) {
         this.groupEntityDao = groupEntityDao;
     }
 
