@@ -22,8 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -31,15 +29,15 @@ public class UserCommandSubscriber {
 
     private final EventBus eventBus;
 
-    private final GroupDao groupEntityDao;
+    private final GroupDao groupDao;
 
-    private final UserDao userEntityDao;
+    private final UserDao userDao;
 
     @Autowired
-    public UserCommandSubscriber(EventBus eventBus, GroupDao groupEntityDao, UserDao userEntityDao) {
+    public UserCommandSubscriber(EventBus eventBus, GroupDao groupDao, UserDao userDao) {
         this.eventBus = eventBus;
-        this.groupEntityDao = groupEntityDao;
-        this.userEntityDao = userEntityDao;
+        this.groupDao = groupDao;
+        this.userDao = userDao;
     }
 
     @EventListener
@@ -71,53 +69,48 @@ public class UserCommandSubscriber {
     }
 
     private void createGroupsIfNeeded(UserDTO userDTO, DomainCommand command) {
-        for (String groupName : userDTO.getGroups()) {
-            if (!groupEntityDao.findOneByName(groupName).isPresent()) {
+        userDTO.getGroups().forEach(groupName -> {
+            if (!groupDao.findOneByName(groupName).isPresent()) {
                 eventBus.publishEvent(new GroupCreatedEvent(groupName), command);
             }
-        }
+        });
     }
 
     private void updateGroups(UserDTO data, DomainCommand command) {
-        Optional<UserEntity> userEntity = userEntityDao.findOneByUsername(data.getUsername());
-        userEntity.ifPresent(userEntityObj -> {
+        userDao.findOneByUsername(data.getUsername()).ifPresent(userEntityObj -> {
             removeDeletedGroups(userEntityObj, data.getGroups(), command);
             addNewGroups(userEntityObj, data.getGroups(), command);
         });
     }
 
     private void removeDeletedGroups(UserEntity userEntity, Collection<String> groups, DomainCommand command) {
-
-        Iterator<GroupEntity> groupEntityIterator = userEntity.getGroups().iterator();
-        while (groupEntityIterator.hasNext()) {
-            GroupEntity groupEntity = groupEntityIterator.next();
+        userEntity.getGroups().forEach(groupEntity -> {
             if (!groups.contains(groupEntity.getName())) {
                 eventBus.publishEvent(new UserLeftGroupEvent(userEntity.getId(), groupEntity.getId()), command);
             }
-        }
+        });
     }
 
     private void addNewGroups(UserEntity userEntity, Collection<String> groups, DomainCommand command) {
-        for (String groupName : groups) {
-            Optional<GroupEntity> group = groupEntityDao.findOneByName(groupName);
-            group.ifPresent(groupEntity ->
-            {
-                if (userCanJoinGroup(userEntity, groupEntity)) {
-                    eventBus.publishEvent(new UserJoinedGroupEvent(userEntity.getId(), groupEntity.getId()), command);
-                }
-            });
-        }
+        groups.forEach(groupName -> groupDao.findOneByName(groupName).ifPresent(groupEntity ->
+        {
+            if (userCanJoinGroup(userEntity, groupEntity)) {
+                eventBus.publishEvent(new UserJoinedGroupEvent(userEntity.getId(), groupEntity.getId()), command);
+            }
+        }));
     }
 
     private boolean canPerformOperation(DomainCommand command) {
+        //TODO: implement method
         return true;
     }
 
     private boolean userCanJoinGroup(UserEntity userEntity, GroupEntity groupEntity) {
+        //TODO: implement method
         return true;
     }
 
     private void sendNotificationEmail(DomainCommand command) {
-        //send email logic
+        //TODO: implement method
     }
 }
