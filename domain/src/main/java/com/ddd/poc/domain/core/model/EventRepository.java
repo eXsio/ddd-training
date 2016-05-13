@@ -18,15 +18,15 @@ public class EventRepository {
         this.eventDao = eventDao;
     }
 
-    public Collection<EventDM> findAll() {
-        return eventDao.findAllOrderByCreatedAt().stream().map(eventEntity -> new EventDM<>(eventEntity)).collect(Collectors.toList());
+    public Collection<Event> findAll() {
+        return eventDao.findAllOrderByCreatedAt().stream().map(eventEntity -> new Event<>(eventEntity)).collect(Collectors.toList());
     }
 
-    public <E extends DomainEvent> EventDM<E> create(E event, CommandEntity commandEntity) {
-        return new EventDM<>(event, commandEntity);
+    public <E extends DomainEvent> Event<E> create(E domainEvent, CommandEntity commandEntity) {
+        return new Event<>(domainEvent, commandEntity);
     }
 
-    public <E extends DomainEvent> EventDM<E> save(EventDM<E> eventDM) {
-        return new EventDM<>(eventDao.save(eventDM.getEntity()));
+    public <E extends DomainEvent> Event<E> save(Event<E> event) {
+        return new Event<>(eventDao.save(event.getEntity()));
     }
 }

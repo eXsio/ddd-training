@@ -28,13 +28,13 @@ public class EventBusImpl implements EventBus {
 
     @Override
     @Transactional
-    public void publishEvent(DomainEvent event, DomainCommand sourceCommand) {
+    public void publishEvent(DomainEvent domainEvent, DomainCommand sourceCommand) {
         try {
-            LOGGER.info("publishing event - {}: {}", event.getClass().getName(), DataConverter.toString(event));
-            eventStore.store(event, sourceCommand);
-            eventQueue.send(event);
+            LOGGER.info("publishing event - {}: {}", domainEvent.getClass().getName(), DataConverter.toString(domainEvent));
+            eventStore.store(domainEvent, sourceCommand);
+            eventQueue.send(domainEvent);
         } catch (Exception ex) {
-            LOGGER.error("An error occurred during event publishing, event: {}, exception: {}", DataConverter.toString(event), ex.getMessage(), ex);
+            LOGGER.error("An error occurred during event publishing, event: {}, exception: {}", DataConverter.toString(domainEvent), ex.getMessage(), ex);
         }
     }
 }

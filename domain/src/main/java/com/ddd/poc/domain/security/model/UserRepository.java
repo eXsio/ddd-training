@@ -20,20 +20,20 @@ public class UserRepository {
         this.groupDao = groupDao;
     }
 
-    public Optional<UserDM> find(Long id) {
+    public Optional<User> find(Long id) {
         Optional<UserEntity> userEntity = userDao.findOne(id);
-        return userEntity.map(userEntityObj -> Optional.of(new UserDM(userEntityObj, groupDao))).orElse(Optional.<UserDM>empty());
+        return userEntity.map(userEntityObj -> Optional.of(new User(userEntityObj, groupDao))).orElse(Optional.<User>empty());
     }
 
-    public UserDM create() {
-        return new UserDM(groupDao);
+    public User create() {
+        return new User(groupDao);
     }
 
-    public UserDM save(UserDM userDM) {
-        return new UserDM(userDao.save(userDM.getEntity()), groupDao);
+    public User save(User user) {
+        return new User(userDao.save(user.getEntity()), groupDao);
     }
 
-    public void delete(UserDM userDM) {
-        userDao.delete(userDM.getEntity());
+    public void delete(User user) {
+        userDao.delete(user.getEntity());
     }
 }

@@ -4,5 +4,5 @@ import com.ddd.poc.domain.core.command.DomainCommand;
 
 public interface CommandBus {
 
-    void publishCommand(DomainCommand sourceCommand);
+    void publishCommand(DomainCommand domainCommand);
 }

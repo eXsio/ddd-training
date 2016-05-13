@@ -4,13 +4,13 @@ import com.ddd.poc.domain.core.event.DomainEvent;
 import com.ddd.poc.domain.core.ex.ClassNotFoundRuntimeException;
 import com.ddd.poc.domain.core.util.DataConverter;
 
-public class EventDM<T extends DomainEvent> extends BaseAggregate<EventEntity> {
+public class Event<T extends DomainEvent> extends BaseAggregate<EventEntity> {
 
-    public EventDM(T event, CommandEntity commandEntity) {
+    public Event(T event, CommandEntity commandEntity) {
         this(new EventEntity(commandEntity, DataConverter.toString(event), event.getClass().getCanonicalName(), event.getUuid().toString()));
     }
 
-    public EventDM(EventEntity entity) {
+    public Event(EventEntity entity) {
         super(entity);
     }
 

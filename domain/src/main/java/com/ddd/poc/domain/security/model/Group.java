@@ -3,19 +3,19 @@ package com.ddd.poc.domain.security.model;
 import com.ddd.poc.domain.core.model.BaseAggregate;
 import org.springframework.transaction.annotation.Transactional;
 
-public class GroupDM extends BaseAggregate<GroupEntity> {
+public class Group extends BaseAggregate<GroupEntity> {
 
 
-    public GroupDM() {
+    public Group() {
         this(new GroupEntity());
     }
 
-    public GroupDM(GroupEntity entity) {
+    public Group(GroupEntity entity) {
         super(entity);
     }
 
     @Transactional
-    public GroupDM update(String name) {
+    public Group update(String name) {
         entity.setName(name);
         return this;
     }

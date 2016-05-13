@@ -16,20 +16,20 @@ public class GroupRepository {
         this.groupDao = groupDao;
     }
 
-    public Optional<GroupDM> find(Long id) {
+    public Optional<Group> find(Long id) {
         Optional<GroupEntity> groupEntity = groupDao.findOne(id);
-        return groupEntity.map(groupEntityObj -> Optional.of(new GroupDM(groupEntityObj))).orElse(Optional.<GroupDM>empty());
+        return groupEntity.map(groupEntityObj -> Optional.of(new Group(groupEntityObj))).orElse(Optional.<Group>empty());
     }
 
-    public GroupDM create() {
-        return new GroupDM();
+    public Group create() {
+        return new Group();
     }
 
-    public GroupDM save(GroupDM groupDM) {
-        return new GroupDM(groupDao.save(groupDM.getEntity()));
+    public Group save(Group groupDM) {
+        return new Group(groupDao.save(groupDM.getEntity()));
     }
 
-    public void delete(GroupDM groupDM) {
+    public void delete(Group groupDM) {
         groupDao.delete(groupDM.getEntity());
     }
 }

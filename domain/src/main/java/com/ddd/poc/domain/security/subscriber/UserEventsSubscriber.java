@@ -5,7 +5,7 @@ import com.ddd.poc.domain.security.event.UserDeletedEvent;
 import com.ddd.poc.domain.security.event.UserJoinedGroupEvent;
 import com.ddd.poc.domain.security.event.UserLeftGroupEvent;
 import com.ddd.poc.domain.security.event.UserUpdatedEvent;
-import com.ddd.poc.domain.security.model.UserDM;
+import com.ddd.poc.domain.security.model.User;
 import com.ddd.poc.domain.security.model.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,28 +38,28 @@ public class UserEventsSubscriber {
     @EventListener
     public void onUserUpdated(UserUpdatedEvent event) {
         LOGGER.info("User updated subscriber called");
-        Optional<UserDM> userDM = userRepository.find(event.getUserDTO().getId());
-        userDM.ifPresent(userDMObj -> userRepository.save(userDMObj.update(event.getUserDTO())));
+        Optional<User> user = userRepository.find(event.getUserDTO().getId());
+        user.ifPresent(userObj -> userRepository.save(userObj.update(event.getUserDTO())));
     }
 
     @EventListener
     public void onUserDeleted(UserDeletedEvent event) {
         LOGGER.info("User deleted subscriber called");
-        Optional<UserDM> userDM = userRepository.find(event.getUserId());
-        userDM.ifPresent(userRepository::delete);
+        Optional<User> user = userRepository.find(event.getUserId());
+        user.ifPresent(userRepository::delete);
     }
 
     @EventListener
     public void onUserJoinedGroup(UserJoinedGroupEvent event) {
         LOGGER.info("User joined group subscriber called");
-        Optional<UserDM> userDM = userRepository.find(event.getUserId());
-        userDM.ifPresent(userDMObj -> userRepository.save(userDMObj.joinGroup(event.getGroupId())));
+        Optional<User> user = userRepository.find(event.getUserId());
+        user.ifPresent(userObj -> userRepository.save(userObj.joinGroup(event.getGroupId())));
     }
 
     @EventListener
     public void onUserLeftGroup(UserLeftGroupEvent event) {
         LOGGER.info("User left group subscriber called");
-        Optional<UserDM> userDM = userRepository.find(event.getUserId());
-        userDM.ifPresent(userDMObj -> userRepository.save(userDMObj.leaveGroup(event.getGroupId())));
+        Optional<User> user = userRepository.find(event.getUserId());
+        user.ifPresent(userObj -> userRepository.save(userObj.leaveGroup(event.getGroupId())));
     }
 }

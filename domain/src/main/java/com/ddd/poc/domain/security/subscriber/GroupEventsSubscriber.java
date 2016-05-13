@@ -3,7 +3,7 @@ package com.ddd.poc.domain.security.subscriber;
 import com.ddd.poc.domain.security.event.GroupCreatedEvent;
 import com.ddd.poc.domain.security.event.GroupDeletedEvent;
 import com.ddd.poc.domain.security.event.GroupUpdatedEvent;
-import com.ddd.poc.domain.security.model.GroupDM;
+import com.ddd.poc.domain.security.model.Group;
 import com.ddd.poc.domain.security.model.GroupRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,14 +37,14 @@ public class GroupEventsSubscriber {
     @EventListener
     public void onGroupUpdated(GroupUpdatedEvent event) {
         LOGGER.info("Group updated subscriber called");
-        Optional<GroupDM> groupDM = groupRepository.find(event.getGroupId());
-        groupDM.ifPresent(groupDMObj -> groupRepository.save(groupDMObj.update(event.getNewName())));
+        Optional<Group> group = groupRepository.find(event.getGroupId());
+        group.ifPresent(groupObj -> groupRepository.save(groupObj.update(event.getNewName())));
     }
 
     @EventListener
     public void onGroupDeleted(GroupDeletedEvent event) {
         LOGGER.info("Group deleted subscriber called");
-        Optional<GroupDM> userDM = groupRepository.find(event.getGroupId());
-        userDM.ifPresent(groupRepository::delete);
+        Optional<Group> group = groupRepository.find(event.getGroupId());
+        group.ifPresent(groupRepository::delete);
     }
 }

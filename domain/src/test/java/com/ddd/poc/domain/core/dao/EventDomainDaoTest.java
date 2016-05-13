@@ -4,7 +4,7 @@ import com.beust.jcommander.internal.Lists;
 import com.ddd.poc.domain.core.command.TestCommand;
 import com.ddd.poc.domain.core.event.TestEvent;
 import com.ddd.poc.domain.core.model.CommandEntity;
-import com.ddd.poc.domain.core.model.EventDM;
+import com.ddd.poc.domain.core.model.Event;
 import com.ddd.poc.domain.core.model.EventRepository;
 import com.ddd.poc.domain.core.model.EventEntity;
 import org.mockito.Mock;
@@ -42,13 +42,13 @@ public class EventDomainDaoTest {
 
     @Test
     public void test_findAll() {
-        Collection<EventDM> result = underTest.findAll();
+        Collection<Event> result = underTest.findAll();
         assertNotNull(result);
         assertEquals(result.size(), 2);
-        Iterator<EventDM> iterator = result.iterator();
-        EventDM event1 = iterator.next();
+        Iterator<Event> iterator = result.iterator();
+        Event event1 = iterator.next();
         assertEquals(event1.getData(), new TestEvent("TEST_VALUE1"));
-        EventDM event2 = iterator.next();
+        Event event2 = iterator.next();
         assertEquals(event2.getData(), new TestEvent("TEST_VALUE2"));
 
     }
@@ -56,7 +56,7 @@ public class EventDomainDaoTest {
     @Test
     public void test_create() {
         CommandEntity commandEntity = new CommandEntity(TestCommand.class.getCanonicalName(), TestCommand.serialized("TEST_VALUE"), uuid);
-        EventDM<TestEvent> result = underTest.create(new TestEvent("TEST_VALUE"), commandEntity);
+        Event<TestEvent> result = underTest.create(new TestEvent("TEST_VALUE"), commandEntity);
         assertNotNull(result);
         assertEquals(result.getData(), new TestEvent("TEST_VALUE"));
     }

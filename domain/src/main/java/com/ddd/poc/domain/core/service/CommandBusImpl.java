@@ -27,13 +27,13 @@ public class CommandBusImpl implements CommandBus {
 
     @Override
     @Transactional
-    public void publishCommand(DomainCommand command) {
+    public void publishCommand(DomainCommand domainCommand) {
         try {
-            LOGGER.info("publishing command - {}: {}", command.getClass().getName(), DataConverter.toString(command));
-            commandStore.store(command);
-            commandQueue.send(command);
+            LOGGER.info("publishing command - {}: {}", domainCommand.getClass().getName(), DataConverter.toString(domainCommand));
+            commandStore.store(domainCommand);
+            commandQueue.send(domainCommand);
         } catch (Exception ex) {
-            LOGGER.error("An error occurred during command publishing, command: {}, exception: {}", DataConverter.toString(command), ex.getMessage(), ex);
+            LOGGER.error("An error occurred during command publishing, command: {}, exception: {}", DataConverter.toString(domainCommand), ex.getMessage(), ex);
         }
     }
 }

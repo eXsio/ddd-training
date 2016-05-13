@@ -20,17 +20,17 @@ public class CommandRepository {
         this.eventRepository = eventRepository;
     }
 
-    public Optional<CommandDM> findByUuid(String uuid) {
+    public Optional<Command> findByUuid(String uuid) {
         Optional<CommandEntity> commandEntity = commandDao.findOneByUuid(uuid);
-        return commandEntity.map(commandEntityObj -> Optional.of(new CommandDM(commandEntityObj, eventRepository)))
-                .orElse(Optional.<CommandDM>empty());
+        return commandEntity.map(commandEntityObj -> Optional.of(new Command(commandEntityObj, eventRepository)))
+                .orElse(Optional.<Command>empty());
     }
 
-    public <T extends DomainCommand> CommandDM<T> create(T command) {
-        return new CommandDM<>(command, eventRepository);
+    public <T extends DomainCommand> Command<T> create(T domainCommand) {
+        return new Command<>(domainCommand, eventRepository);
     }
 
-    public <E extends DomainCommand> CommandDM<E> save(CommandDM<E> commandDM) {
-        return new CommandDM<>(commandDao.save(commandDM.getEntity()), eventRepository);
+    public <E extends DomainCommand> Command<E> save(Command<E> command) {
+        return new Command<>(commandDao.save(command.getEntity()), eventRepository);
     }
 }

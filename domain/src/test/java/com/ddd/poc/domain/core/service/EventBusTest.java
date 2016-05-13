@@ -6,9 +6,9 @@ import com.ddd.poc.domain.core.dao.CommandDao;
 import com.ddd.poc.domain.core.model.EventRepository;
 import com.ddd.poc.domain.core.dao.EventDao;
 import com.ddd.poc.domain.core.event.TestEvent;
-import com.ddd.poc.domain.core.model.CommandDM;
+import com.ddd.poc.domain.core.model.Command;
 import com.ddd.poc.domain.core.model.CommandEntity;
-import com.ddd.poc.domain.core.model.EventDM;
+import com.ddd.poc.domain.core.model.Event;
 import com.ddd.poc.domain.core.service.queue.SpringDispatcherEventQueueImpl;
 import com.ddd.poc.domain.core.service.store.JpaEventStoreImpl;
 import org.mockito.Mock;
@@ -42,9 +42,9 @@ public class EventBusTest {
     @Mock
     private CommandDao commandEntityDao;
 
-    private EventDM<TestEvent> eventDM;
+    private Event<TestEvent> eventDM;
 
-    private CommandDM<TestCommand> commandDM;
+    private Command<TestCommand> commandDM;
 
     private EventBus underTest;
 
@@ -59,8 +59,8 @@ public class EventBusTest {
     @BeforeClass
     public void init() {
         MockitoAnnotations.initMocks(this);
-        eventDM = spy(new EventDM<>(event, commandEntity));
-        commandDM = spy(new CommandDM<>(command, eventRepository));
+        eventDM = spy(new Event<>(event, commandEntity));
+        commandDM = spy(new Command<>(command, eventRepository));
         when(commandRepository.create(command)).thenReturn(commandDM);
         when(commandRepository.findByUuid(anyString())).thenReturn(Optional.of(commandDM));
         when(eventRepository.create(event, commandEntity)).thenReturn(eventDM);

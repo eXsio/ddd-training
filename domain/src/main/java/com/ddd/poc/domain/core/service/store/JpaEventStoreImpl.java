@@ -3,7 +3,7 @@ package com.ddd.poc.domain.core.service.store;
 import com.ddd.poc.domain.core.command.DomainCommand;
 import com.ddd.poc.domain.core.event.DomainEvent;
 import com.ddd.poc.domain.core.ex.RelatedCommandNotFoundRuntimeException;
-import com.ddd.poc.domain.core.model.CommandDM;
+import com.ddd.poc.domain.core.model.Command;
 import com.ddd.poc.domain.core.model.CommandRepository;
 import com.ddd.poc.domain.core.model.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +29,8 @@ public class JpaEventStoreImpl implements EventStore {
         eventRepository.save(getCommandModel(event, command).createEvent(event));
     }
 
-    private CommandDM getCommandModel(DomainEvent event, DomainCommand command) {
-        Optional<CommandDM> commandDM = commandRepository.findByUuid(command.getUuid().toString());
+    private Command getCommandModel(DomainEvent event, DomainCommand command) {
+        Optional<Command> commandDM = commandRepository.findByUuid(command.getUuid().toString());
         return commandDM.map(commandDMObj -> commandDMObj)
                 .orElseThrow(() -> new RelatedCommandNotFoundRuntimeException(
                         String.format("couldn't find stored command: %s related to event %s", command, event)));

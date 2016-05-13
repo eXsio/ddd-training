@@ -6,15 +6,15 @@ import com.ddd.poc.domain.core.ex.ClassNotFoundRuntimeException;
 import com.ddd.poc.domain.core.util.DataConverter;
 import com.google.common.base.Preconditions;
 
-public class CommandDM<C extends DomainCommand> extends BaseAggregate<CommandEntity> {
+public class Command<C extends DomainCommand> extends BaseAggregate<CommandEntity> {
 
     private final EventRepository eventRepository;
 
-    public CommandDM(C command, EventRepository eventRepository) {
+    public Command(C command, EventRepository eventRepository) {
         this(new CommandEntity(DataConverter.toString(command), command.getClass().getCanonicalName(), command.getUuid().toString()), eventRepository);
     }
 
-    public CommandDM(CommandEntity entity, EventRepository eventRepository) {
+    public Command(CommandEntity entity, EventRepository eventRepository) {
         super(entity);
         Preconditions.checkNotNull(eventRepository);
 
@@ -29,7 +29,7 @@ public class CommandDM<C extends DomainCommand> extends BaseAggregate<CommandEnt
         }
     }
 
-    public <E extends DomainEvent> EventDM<E> createEvent(E event) {
+    public <E extends DomainEvent> Event<E> createEvent(E event) {
         return eventRepository.create(event, entity);
     }
 

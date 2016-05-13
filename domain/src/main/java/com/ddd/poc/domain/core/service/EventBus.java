@@ -5,5 +5,5 @@ import com.ddd.poc.domain.core.event.DomainEvent;
 
 public interface EventBus {
 
-    public void publishEvent(DomainEvent event, DomainCommand sourceCommand);
+    public void publishEvent(DomainEvent domainEvent, DomainCommand sourceCommand);
 }

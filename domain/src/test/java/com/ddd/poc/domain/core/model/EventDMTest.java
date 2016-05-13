@@ -34,7 +34,7 @@ public class EventDMTest {
         TestEvent event = new TestEvent();
         event.setTestField(TEST_VALUE);
         CommandEntity commandEntity = new CommandEntity(TestCommand.class.getCanonicalName(), TestCommand.serialized(TEST_VALUE), uuid);
-        EventDM<TestEvent> result = new EventDM<>(event, commandEntity);
+        Event<TestEvent> result = new Event<>(event, commandEntity);
 
         assertEquals(result.getEventClass(), TestEvent.class);
         assertEquals(result.getData(), event);
@@ -52,7 +52,7 @@ public class EventDMTest {
         event.setTestField(TEST_VALUE);
         CommandEntity commandEntity = new CommandEntity(TestCommand.serialized(TEST_VALUE), TestCommand.class.getCanonicalName(), uuid);
         EventEntity entity = new EventEntity(commandEntity, TestEvent.serialized("TEST_VALUE"), TestEvent.class.getCanonicalName(), uuid);
-        EventDM<TestEvent> result = new EventDM<>(entity);
+        Event<TestEvent> result = new Event<>(entity);
 
         assertEquals(result.getEventClass(), TestEvent.class);
         assertEquals(result.getData(), event);
