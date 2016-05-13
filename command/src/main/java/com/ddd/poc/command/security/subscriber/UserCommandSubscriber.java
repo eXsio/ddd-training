@@ -1,4 +1,4 @@
-package com.ddd.poc.command.security.service;
+package com.ddd.poc.command.security.subscriber;
 
 import com.ddd.poc.command.security.command.CreateUserCommand;
 import com.ddd.poc.command.security.command.DeleteUserCommand;
@@ -17,6 +17,7 @@ import com.ddd.poc.domain.security.event.UserUpdatedEvent;
 import com.ddd.poc.domain.security.model.GroupEntity;
 import com.ddd.poc.domain.security.model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +27,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class UserService {
+public class UserCommandSubscriber {
 
     private final EventBus eventBus;
 
@@ -35,13 +36,14 @@ public class UserService {
     private final UserEntityDao userEntityDao;
 
     @Autowired
-    public UserService(EventBus eventBus, GroupEntityDao groupEntityDao, UserEntityDao userEntityDao) {
+    public UserCommandSubscriber(EventBus eventBus, GroupEntityDao groupEntityDao, UserEntityDao userEntityDao) {
         this.eventBus = eventBus;
         this.groupEntityDao = groupEntityDao;
         this.userEntityDao = userEntityDao;
     }
 
-    public void createUser(CreateUserCommand command) {
+    @EventListener
+    public void onCreateUserCommand(CreateUserCommand command) {
         if (canPerformOperation(command)) {
             createGroupsIfNeeded(command.getUserDTO(), command);
             eventBus.publishEvent(new UserCreatedEvent(command.getUserDTO()), command);
@@ -50,7 +52,8 @@ public class UserService {
         }
     }
 
-    public void updateUser(UpdateUserCommand command) {
+    @EventListener
+    public void onUpdateUserCommand(UpdateUserCommand command) {
         if (canPerformOperation(command)) {
             createGroupsIfNeeded(command.getUserDTO(), command);
             eventBus.publishEvent(new UserUpdatedEvent(command.getUserDTO()), command);
@@ -59,7 +62,8 @@ public class UserService {
         }
     }
 
-    public void deleteUser(DeleteUserCommand command) {
+    @EventListener
+    public void onDeleteUserCommand(DeleteUserCommand command) {
         if (canPerformOperation(command)) {
             eventBus.publishEvent(new UserDeletedEvent(command.getUserId()), command);
             sendNotificationEmail(command);

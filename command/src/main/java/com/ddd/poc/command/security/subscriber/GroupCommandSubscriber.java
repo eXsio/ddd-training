@@ -1,4 +1,4 @@
-package com.ddd.poc.command.security.service;
+package com.ddd.poc.command.security.subscriber;
 
 import com.ddd.poc.command.security.command.CreateGroupCommand;
 import com.ddd.poc.command.security.command.DeleteGroupCommand;
@@ -12,38 +12,42 @@ import com.ddd.poc.domain.security.event.GroupUpdatedEvent;
 import com.ddd.poc.domain.security.event.UserLeftGroupEvent;
 import com.ddd.poc.domain.security.model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class GroupService {
+public class GroupCommandSubscriber {
 
     private final EventBus eventBus;
 
     private final GroupEntityDao groupEntityDao;
 
     @Autowired
-    public GroupService(EventBus eventBus, GroupEntityDao groupEntityDao) {
+    public GroupCommandSubscriber(EventBus eventBus, GroupEntityDao groupEntityDao) {
         this.eventBus = eventBus;
         this.groupEntityDao = groupEntityDao;
     }
 
-    public void createGroup(CreateGroupCommand command) {
+    @EventListener
+    public void onCreateGroupCommand(CreateGroupCommand command) {
         if (canPerformOperation(command)) {
             eventBus.publishEvent(new GroupCreatedEvent(command.getName()), command);
             sendNotificationEmail(command);
         }
     }
 
-    public void updateGroup(UpdateGroupCommand command) {
+    @EventListener
+    public void onUpdateGroupCommand(UpdateGroupCommand command) {
         if (canPerformOperation(command)) {
             eventBus.publishEvent(new GroupUpdatedEvent(command.getGroupId(), command.getNewName()), command);
             sendNotificationEmail(command);
         }
     }
 
-    public void deleteGroup(DeleteGroupCommand command) {
+    @EventListener
+    public void onDeleteGroupCommand(DeleteGroupCommand command) {
         if (canPerformOperation(command)) {
             removeUsersFromGroup(command);
             eventBus.publishEvent(new GroupDeletedEvent(command.getGroupId()), command);
