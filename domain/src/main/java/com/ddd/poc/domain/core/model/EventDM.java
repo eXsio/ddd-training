@@ -1,32 +1,30 @@
 package com.ddd.poc.domain.core.model;
 
-import com.ddd.poc.domain.core.dao.EventEntityDao;
+import com.ddd.poc.domain.core.repository.EventEntityRepository;
 import com.ddd.poc.domain.core.event.DomainEvent;
 import com.ddd.poc.domain.core.ex.ClassNotFoundRuntimeException;
 import com.ddd.poc.domain.core.util.DataConverter;
 import com.google.common.base.Preconditions;
 import org.springframework.transaction.annotation.Transactional;
 
-public class EventDM<T extends DomainEvent> {
+public class EventDM<T extends DomainEvent> extends BaseAggregate<EventEntity> {
 
-    private final EventEntity entity;
 
-    private final EventEntityDao eventEntityDao;
+    private final EventEntityRepository eventEntityRepository;
 
-    public EventDM(T event, CommandEntity commandEntity, EventEntityDao eventEntityDao) {
-        this(new EventEntity(commandEntity, DataConverter.toString(event), event.getClass().getCanonicalName(), event.getUuid().toString()), eventEntityDao);
+    public EventDM(T event, CommandEntity commandEntity, EventEntityRepository eventEntityRepository) {
+        this(new EventEntity(commandEntity, DataConverter.toString(event), event.getClass().getCanonicalName(), event.getUuid().toString()), eventEntityRepository);
     }
 
-    public EventDM(EventEntity entity, EventEntityDao eventEntityDao) {
-        Preconditions.checkNotNull(entity);
-        Preconditions.checkNotNull(eventEntityDao);
-        this.entity = entity;
-        this.eventEntityDao = eventEntityDao;
+    public EventDM(EventEntity entity, EventEntityRepository eventEntityRepository) {
+        super(entity);
+        Preconditions.checkNotNull(eventEntityRepository);
+        this.eventEntityRepository = eventEntityRepository;
     }
 
     @Transactional
     public EventDM save() {
-        eventEntityDao.save(entity);
+        eventEntityRepository.save(entity);
         return this;
     }
 

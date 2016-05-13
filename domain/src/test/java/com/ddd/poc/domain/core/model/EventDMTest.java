@@ -1,7 +1,7 @@
 package com.ddd.poc.domain.core.model;
 
 import com.ddd.poc.domain.core.command.TestCommand;
-import com.ddd.poc.domain.core.dao.EventEntityDao;
+import com.ddd.poc.domain.core.repository.EventEntityRepository;
 import com.ddd.poc.domain.core.event.TestEvent;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -21,7 +21,7 @@ public class EventDMTest {
     private final static String TEST_VALUE = "TEST_VALUE";
 
     @Mock
-    private EventEntityDao eventEntityDao;
+    private EventEntityRepository eventEntityDao;
 
     private String uuid = UUID.randomUUID().toString();
 

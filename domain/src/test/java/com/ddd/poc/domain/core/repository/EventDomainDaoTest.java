@@ -1,4 +1,4 @@
-package com.ddd.poc.domain.core.dao;
+package com.ddd.poc.domain.core.repository;
 
 import com.beust.jcommander.internal.Lists;
 import com.ddd.poc.domain.core.command.TestCommand;
@@ -22,9 +22,9 @@ import static org.testng.AssertJUnit.assertNotNull;
 public class EventDomainDaoTest {
 
     @Mock
-    private EventEntityDao eventEntityDao;
+    private EventEntityRepository eventEntityDao;
 
-    private EventDomainDao underTest;
+    private EventDomainRepository underTest;
 
     private String uuid = UUID.randomUUID().toString();
 
@@ -36,7 +36,7 @@ public class EventDomainDaoTest {
                 new EventEntity(commandEntity, TestEvent.serialized("TEST_VALUE1"), TestEvent.class.getCanonicalName(), uuid),
                 new EventEntity(commandEntity, TestEvent.serialized("TEST_VALUE2"), TestEvent.class.getCanonicalName(), uuid)
         ));
-        underTest = new EventDomainDao(eventEntityDao);
+        underTest = new EventDomainRepository(eventEntityDao);
     }
 
     @Test

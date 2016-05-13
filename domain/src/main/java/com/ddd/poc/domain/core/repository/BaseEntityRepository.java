@@ -1,10 +1,10 @@
-package com.ddd.poc.domain.core.dao;
+package com.ddd.poc.domain.core.repository;
 
 
 import java.util.List;
 import java.util.Optional;
 
-public interface BaseEntityDao<T> {
+public interface BaseEntityRepository<T> {
 
     Optional<T> findOne(Long id);
 

@@ -1,6 +1,6 @@
 package com.ddd.poc.domain.security.subscriber;
 
-import com.ddd.poc.domain.security.dao.GroupDomainDao;
+import com.ddd.poc.domain.security.repository.GroupDomainRepository;
 import com.ddd.poc.domain.security.event.GroupCreatedEvent;
 import com.ddd.poc.domain.security.event.GroupDeletedEvent;
 import com.ddd.poc.domain.security.event.GroupUpdatedEvent;
@@ -18,31 +18,31 @@ public class GroupEventsSubscriber {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(GroupEventsSubscriber.class);
 
-    private final GroupDomainDao groupDomainDao;
+    private final GroupDomainRepository groupDomainRepository;
 
     @Autowired
-    public GroupEventsSubscriber(GroupDomainDao groupDomainDao) {
-        this.groupDomainDao = groupDomainDao;
+    public GroupEventsSubscriber(GroupDomainRepository groupDomainRepository) {
+        this.groupDomainRepository = groupDomainRepository;
     }
 
     @EventListener
     public void onGroupCreated(GroupCreatedEvent event) {
         LOGGER.info("Group created subscriber called");
-        groupDomainDao.create().save(event.getName());
+        groupDomainRepository.create().save(event.getName());
 
     }
 
     @EventListener
     public void onGroupUpdated(GroupUpdatedEvent event) {
         LOGGER.info("Group updated subscriber called");
-        Optional<GroupDM> groupDM = groupDomainDao.find(event.getGroupId());
+        Optional<GroupDM> groupDM = groupDomainRepository.find(event.getGroupId());
         groupDM.ifPresent(groupDMObj -> groupDMObj.save(event.getNewName()));
     }
 
     @EventListener
     public void onGroupDeleted(GroupDeletedEvent event) {
         LOGGER.info("Group deleted subscriber called");
-        Optional<GroupDM> userDM = groupDomainDao.find(event.getGroupId());
+        Optional<GroupDM> userDM = groupDomainRepository.find(event.getGroupId());
         userDM.ifPresent(GroupDM::delete);
     }
 }

@@ -1,7 +1,7 @@
 package com.ddd.poc.query.core.controller;
 
 import com.ddd.poc.domain.api.RestUrls;
-import com.ddd.poc.domain.core.dao.EventEntityDao;
+import com.ddd.poc.domain.core.repository.EventEntityRepository;
 import com.ddd.poc.domain.core.dto.CommandDTO;
 import com.ddd.poc.domain.core.dto.EventDTO;
 import com.ddd.poc.domain.core.model.CommandEntity;
@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -22,10 +19,10 @@ import java.util.stream.Collectors;
 @RequestMapping(RestUrls.EVENTS)
 public class EventsQueryController {
 
-    private final EventEntityDao eventEntityDao;
+    private final EventEntityRepository eventEntityDao;
 
     @Autowired
-    public EventsQueryController(EventEntityDao eventEntityDao) {
+    public EventsQueryController(EventEntityRepository eventEntityDao) {
         this.eventEntityDao = eventEntityDao;
     }
 

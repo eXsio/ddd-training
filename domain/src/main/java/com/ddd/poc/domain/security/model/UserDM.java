@@ -1,31 +1,29 @@
 package com.ddd.poc.domain.security.model;
 
-import com.ddd.poc.domain.security.dao.GroupEntityDao;
-import com.ddd.poc.domain.security.dao.UserEntityDao;
+import com.ddd.poc.domain.core.model.BaseAggregate;
 import com.ddd.poc.domain.security.dto.UserDTO;
+import com.ddd.poc.domain.security.repository.GroupEntityRepository;
+import com.ddd.poc.domain.security.repository.UserEntityRepository;
 import com.google.common.base.Preconditions;
 import org.springframework.transaction.annotation.Transactional;
 
-public class UserDM {
+public class UserDM extends BaseAggregate<UserEntity> {
 
-    private final UserEntity entity;
+    private final UserEntityRepository userEntityRepository;
 
-    private final UserEntityDao userEntityDao;
+    private final GroupEntityRepository groupEntityRepository;
 
-    private final GroupEntityDao groupEntityDao;
-
-    public UserDM(UserEntityDao userEntityDao, GroupEntityDao groupEntityDao) {
-        this(new UserEntity(), userEntityDao, groupEntityDao);
+    public UserDM(UserEntityRepository userEntityRepository, GroupEntityRepository groupEntityRepository) {
+        this(new UserEntity(), userEntityRepository, groupEntityRepository);
     }
 
-    public UserDM(UserEntity entity, UserEntityDao userEntityDao, GroupEntityDao groupEntityDao) {
-        Preconditions.checkNotNull(entity);
-        Preconditions.checkNotNull(userEntityDao);
-        Preconditions.checkNotNull(groupEntityDao);
+    public UserDM(UserEntity entity, UserEntityRepository userEntityRepository, GroupEntityRepository groupEntityRepository) {
+        super(entity);
+        Preconditions.checkNotNull(userEntityRepository);
+        Preconditions.checkNotNull(groupEntityRepository);
 
-        this.entity = entity;
-        this.userEntityDao = userEntityDao;
-        this.groupEntityDao = groupEntityDao;
+        this.userEntityRepository = userEntityRepository;
+        this.groupEntityRepository = groupEntityRepository;
     }
 
     @Transactional
@@ -34,29 +32,29 @@ public class UserDM {
         entity.setActive(data.isActive());
         entity.setPassword(encryptPassword(data.getPassword()));
         entity.setUsername(data.getUsername());
-        userEntityDao.save(entity);
+        userEntityRepository.save(entity);
 
         return this;
     }
 
     @Transactional
     public UserDM delete() {
-        userEntityDao.delete(entity);
+        userEntityRepository.delete(entity);
         return this;
     }
 
     public UserDM joinGroup(Long groupId) {
-        groupEntityDao.findOne(groupId).ifPresent(groupEntity -> {
+        groupEntityRepository.findOne(groupId).ifPresent(groupEntity -> {
             entity.addGroup(groupEntity);
-            userEntityDao.save(entity);
+            userEntityRepository.save(entity);
         });
         return this;
     }
 
     public UserDM leaveGroup(Long groupId) {
-        groupEntityDao.findOne(groupId).ifPresent(groupEntity -> {
+        groupEntityRepository.findOne(groupId).ifPresent(groupEntity -> {
             entity.removeGroup(groupEntity);
-            userEntityDao.save(entity);
+            userEntityRepository.save(entity);
         });
         return this;
     }

@@ -5,8 +5,8 @@ import com.ddd.poc.command.security.command.DeleteUserCommand;
 import com.ddd.poc.command.security.command.UpdateUserCommand;
 import com.ddd.poc.domain.core.command.DomainCommand;
 import com.ddd.poc.domain.core.service.EventBus;
-import com.ddd.poc.domain.security.dao.GroupEntityDao;
-import com.ddd.poc.domain.security.dao.UserEntityDao;
+import com.ddd.poc.domain.security.repository.GroupEntityRepository;
+import com.ddd.poc.domain.security.repository.UserEntityRepository;
 import com.ddd.poc.domain.security.dto.UserDTO;
 import com.ddd.poc.domain.security.event.GroupCreatedEvent;
 import com.ddd.poc.domain.security.event.UserCreatedEvent;
@@ -31,12 +31,12 @@ public class UserCommandSubscriber {
 
     private final EventBus eventBus;
 
-    private final GroupEntityDao groupEntityDao;
+    private final GroupEntityRepository groupEntityDao;
 
-    private final UserEntityDao userEntityDao;
+    private final UserEntityRepository userEntityDao;
 
     @Autowired
-    public UserCommandSubscriber(EventBus eventBus, GroupEntityDao groupEntityDao, UserEntityDao userEntityDao) {
+    public UserCommandSubscriber(EventBus eventBus, GroupEntityRepository groupEntityDao, UserEntityRepository userEntityDao) {
         this.eventBus = eventBus;
         this.groupEntityDao = groupEntityDao;
         this.userEntityDao = userEntityDao;

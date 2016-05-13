@@ -1,7 +1,7 @@
 package com.ddd.poc.domain.core.service.store;
 
 import com.ddd.poc.domain.core.command.DomainCommand;
-import com.ddd.poc.domain.core.dao.CommandDomainDao;
+import com.ddd.poc.domain.core.repository.CommandDomainRepository;
 import com.ddd.poc.domain.core.ex.CommandStoreRuntimeException;
 import com.ddd.poc.domain.core.model.CommandDM;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +12,10 @@ import java.util.Optional;
 @Service
 public class JpaCommandStoreImpl implements CommandStore {
 
-    private final CommandDomainDao commandDomainDao;
+    private final CommandDomainRepository commandDomainDao;
 
     @Autowired
-    public JpaCommandStoreImpl(CommandDomainDao commandDomainDao) {
+    public JpaCommandStoreImpl(CommandDomainRepository commandDomainDao) {
         this.commandDomainDao = commandDomainDao;
     }
 

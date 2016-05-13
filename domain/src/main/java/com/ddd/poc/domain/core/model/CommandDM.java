@@ -1,40 +1,36 @@
 package com.ddd.poc.domain.core.model;
 
 import com.ddd.poc.domain.core.command.DomainCommand;
-import com.ddd.poc.domain.core.dao.CommandEntityDao;
-import com.ddd.poc.domain.core.dao.EventDomainDao;
 import com.ddd.poc.domain.core.event.DomainEvent;
 import com.ddd.poc.domain.core.ex.ClassNotFoundRuntimeException;
+import com.ddd.poc.domain.core.repository.CommandEntityRepository;
+import com.ddd.poc.domain.core.repository.EventDomainRepository;
 import com.ddd.poc.domain.core.util.DataConverter;
 import com.google.common.base.Preconditions;
 import org.springframework.transaction.annotation.Transactional;
 
-public class CommandDM<C extends DomainCommand> {
+public class CommandDM<C extends DomainCommand> extends BaseAggregate<CommandEntity> {
 
-    private final CommandEntity entity;
+    private final CommandEntityRepository commandEntityRepository;
 
-    private final CommandEntityDao commandEntityDao;
+    private final EventDomainRepository eventDomainRepository;
 
-    private final EventDomainDao eventDomainDao;
-
-    public CommandDM(C command, CommandEntityDao commandEntityDao, EventDomainDao eventDomainDao) {
-        this(new CommandEntity(DataConverter.toString(command), command.getClass().getCanonicalName(), command.getUuid().toString()), commandEntityDao, eventDomainDao);
+    public CommandDM(C command, CommandEntityRepository commandEntityRepository, EventDomainRepository eventDomainRepository) {
+        this(new CommandEntity(DataConverter.toString(command), command.getClass().getCanonicalName(), command.getUuid().toString()), commandEntityRepository, eventDomainRepository);
     }
 
-    public CommandDM(CommandEntity entity, CommandEntityDao commandEntityDao, EventDomainDao eventDomainDao) {
+    public CommandDM(CommandEntity entity, CommandEntityRepository commandEntityRepository, EventDomainRepository eventDomainRepository) {
+        super(entity);
+        Preconditions.checkNotNull(commandEntityRepository);
+        Preconditions.checkNotNull(eventDomainRepository);
 
-        Preconditions.checkNotNull(entity);
-        Preconditions.checkNotNull(commandEntityDao);
-        Preconditions.checkNotNull(eventDomainDao);
-
-        this.entity = entity;
-        this.commandEntityDao = commandEntityDao;
-        this.eventDomainDao = eventDomainDao;
+        this.commandEntityRepository = commandEntityRepository;
+        this.eventDomainRepository = eventDomainRepository;
     }
 
     @Transactional
     public CommandDM save() {
-        commandEntityDao.save(entity);
+        commandEntityRepository.save(entity);
         return this;
     }
 
@@ -47,7 +43,7 @@ public class CommandDM<C extends DomainCommand> {
     }
 
     public <E extends DomainEvent> EventDM<E> createEvent(E event) {
-        return eventDomainDao.create(event, entity);
+        return eventDomainRepository.create(event, entity);
     }
 
     public C getCommand() {

@@ -1,10 +1,10 @@
 package com.ddd.poc.domain.core.service;
 
 import com.ddd.poc.domain.core.command.TestCommand;
-import com.ddd.poc.domain.core.dao.CommandDomainDao;
-import com.ddd.poc.domain.core.dao.CommandEntityDao;
-import com.ddd.poc.domain.core.dao.EventDomainDao;
-import com.ddd.poc.domain.core.dao.EventEntityDao;
+import com.ddd.poc.domain.core.repository.CommandDomainRepository;
+import com.ddd.poc.domain.core.repository.CommandEntityRepository;
+import com.ddd.poc.domain.core.repository.EventDomainRepository;
+import com.ddd.poc.domain.core.repository.EventEntityRepository;
 import com.ddd.poc.domain.core.event.TestEvent;
 import com.ddd.poc.domain.core.model.CommandDM;
 import com.ddd.poc.domain.core.model.CommandEntity;
@@ -23,7 +23,6 @@ import java.util.UUID;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 public class EventBusTest {
@@ -32,16 +31,16 @@ public class EventBusTest {
     private ApplicationEventPublisher publisher;
 
     @Mock
-    private EventEntityDao eventEntityDao;
+    private EventEntityRepository eventEntityDao;
 
     @Mock
-    private EventDomainDao eventDomainDao;
+    private EventDomainRepository eventDomainDao;
 
     @Mock
-    private CommandDomainDao commandDomainDao;
+    private CommandDomainRepository commandDomainDao;
 
     @Mock
-    private CommandEntityDao commandEntityDao;
+    private CommandEntityRepository commandEntityDao;
 
     private EventDM<TestEvent> eventDM;
 
