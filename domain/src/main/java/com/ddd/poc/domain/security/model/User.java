@@ -1,8 +1,8 @@
 package com.ddd.poc.domain.security.model;
 
 import com.ddd.poc.domain.core.model.BaseAggregate;
-import com.ddd.poc.domain.security.dto.UserDTO;
 import com.ddd.poc.domain.security.dao.GroupDao;
+import com.ddd.poc.domain.security.dto.UserDTO;
 import com.google.common.base.Preconditions;
 
 public class User extends BaseAggregate<UserEntity> {
@@ -29,16 +29,12 @@ public class User extends BaseAggregate<UserEntity> {
     }
 
     public User joinGroup(Long groupId) {
-        groupDao.findOne(groupId).ifPresent(groupEntity -> {
-            entity.addGroup(groupEntity);
-        });
+        groupDao.findOne(groupId).ifPresent(entity::addGroup);
         return this;
     }
 
     public User leaveGroup(Long groupId) {
-        groupDao.findOne(groupId).ifPresent(groupEntity -> {
-            entity.removeGroup(groupEntity);
-        });
+        groupDao.findOne(groupId).ifPresent(entity::removeGroup);
         return this;
     }
 
