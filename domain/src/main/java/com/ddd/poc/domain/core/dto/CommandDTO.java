@@ -19,6 +19,8 @@ public class CommandDTO {
 
     private Collection<EventDTO> events;
 
+    private Collection<CommandDTO> subCommands;
+
     public Long getId() {
         return id;
     }
@@ -57,6 +59,14 @@ public class CommandDTO {
 
     public void setEvents(Collection<EventDTO> events) {
         this.events = events;
+    }
+
+    public Collection<CommandDTO> getSubCommands() {
+        return subCommands;
+    }
+
+    public void setSubCommands(Collection<CommandDTO> subCommands) {
+        this.subCommands = subCommands;
     }
 
     public String getUuid() {

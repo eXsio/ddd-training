@@ -5,6 +5,7 @@ import com.ddd.poc.domain.security.event.GroupDeletedEvent;
 import com.ddd.poc.domain.security.event.GroupUpdatedEvent;
 import com.ddd.poc.domain.security.model.Group;
 import com.ddd.poc.domain.security.model.GroupRepository;
+import com.ddd.poc.domain.security.util.ThreadUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +31,16 @@ public class GroupEventsSubscriber {
     @EventListener
     public void onGroupCreated(GroupCreatedEvent event) {
         LOGGER.info("Group created subscriber called");
+        ThreadUtil.simulateLatecy();
         groupRepository.save(groupRepository.create().update(event.getName()));
 
     }
 
+
     @EventListener
     public void onGroupUpdated(GroupUpdatedEvent event) {
         LOGGER.info("Group updated subscriber called");
+        ThreadUtil.simulateLatecy();
         Optional<Group> group = groupRepository.find(event.getGroupId());
         group.ifPresent(groupObj -> groupRepository.save(groupObj.update(event.getNewName())));
     }
@@ -44,6 +48,7 @@ public class GroupEventsSubscriber {
     @EventListener
     public void onGroupDeleted(GroupDeletedEvent event) {
         LOGGER.info("Group deleted subscriber called");
+        ThreadUtil.simulateLatecy();
         Optional<Group> group = groupRepository.find(event.getGroupId());
         group.ifPresent(groupRepository::delete);
     }

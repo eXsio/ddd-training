@@ -14,6 +14,11 @@ public class Command<C extends DomainCommand> extends BaseAggregate<CommandEntit
         this(new CommandEntity(DataConverter.toString(command), command.getClass().getCanonicalName(), command.getUuid().toString()), eventRepository);
     }
 
+    public Command(C command, Command parentCommand, EventRepository eventRepository) {
+        this(new CommandEntity(DataConverter.toString(command), command.getClass().getCanonicalName(), command.getUuid().toString()), eventRepository);
+        entity.setParentCommand(parentCommand.getEntity());
+    }
+
     public Command(CommandEntity entity, EventRepository eventRepository) {
         super(entity);
         Preconditions.checkNotNull(eventRepository);

@@ -4,6 +4,8 @@ import com.ddd.poc.command.security.command.CreateGroupCommand;
 import com.ddd.poc.command.security.command.DeleteGroupCommand;
 import com.ddd.poc.command.security.command.UpdateGroupCommand;
 import com.ddd.poc.domain.api.RestUrls;
+import com.ddd.poc.domain.core.annotation.Asynchronous;
+import com.ddd.poc.domain.core.annotation.Synchronous;
 import com.ddd.poc.domain.core.service.CommandBus;
 import com.ddd.poc.domain.security.dto.GroupDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,7 @@ public class GroupsCommandController {
     private final CommandBus commandBus;
 
     @Autowired
-    public GroupsCommandController(CommandBus commandBus) {
+    public GroupsCommandController(@Asynchronous CommandBus commandBus) {
         this.commandBus = commandBus;
     }
 

@@ -66,7 +66,7 @@ public class EventBusTest {
         when(eventRepository.create(event, commandEntity)).thenReturn(eventDM);
         when(commandDM.createEvent(event)).thenReturn(eventDM);
 
-        underTest = new EventBusImpl(new JpaEventStoreImpl(commandRepository, eventRepository), new SpringDispatcherEventQueueImpl(publisher));
+        underTest = new SynchronousEventBusImpl(new JpaEventStoreImpl(commandRepository, eventRepository), new SpringDispatcherEventQueueImpl(publisher));
     }
 
     @Test

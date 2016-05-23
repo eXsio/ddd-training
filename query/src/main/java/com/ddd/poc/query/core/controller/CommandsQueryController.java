@@ -39,6 +39,9 @@ public class CommandsQueryController {
         commandDTO.setData(entity.getCommandData());
         commandDTO.setEvents(entity.getEvents().stream().map(this::getEventDTO).collect(Collectors.toList()));
         commandDTO.setUuid(entity.getUuid());
+        if (entity.getSubCommands() != null) {
+            commandDTO.setSubCommands(entity.getSubCommands().stream().map(this::getCommandDTO).collect(Collectors.toList()));
+        }
         return commandDTO;
     }
 

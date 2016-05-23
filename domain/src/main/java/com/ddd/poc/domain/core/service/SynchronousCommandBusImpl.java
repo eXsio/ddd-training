@@ -1,5 +1,6 @@
 package com.ddd.poc.domain.core.service;
 
+import com.ddd.poc.domain.core.annotation.Synchronous;
 import com.ddd.poc.domain.core.command.DomainCommand;
 import com.ddd.poc.domain.core.service.queue.CommandQueue;
 import com.ddd.poc.domain.core.service.store.CommandStore;
@@ -7,20 +8,22 @@ import com.ddd.poc.domain.core.util.DataConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class CommandBusImpl implements CommandBus {
+@Synchronous
+public class SynchronousCommandBusImpl implements CommandBus {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(CommandBusImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(SynchronousCommandBusImpl.class);
 
     private final CommandStore commandStore;
 
     private final CommandQueue commandQueue;
 
     @Autowired
-    public CommandBusImpl(CommandStore commandStore, CommandQueue commandQueue) {
+    public SynchronousCommandBusImpl(CommandStore commandStore, CommandQueue commandQueue) {
         this.commandStore = commandStore;
         this.commandQueue = commandQueue;
     }

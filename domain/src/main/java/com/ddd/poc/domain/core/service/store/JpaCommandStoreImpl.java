@@ -24,10 +24,22 @@ public class JpaCommandStoreImpl implements CommandStore {
         try {
             Optional<Command> commandDM = commandRepository.findByUuid(command.getUuid().toString());
             if (!commandDM.isPresent()) {
-                commandRepository.save(commandRepository.create(command));
+                Command newCommandDM = command.getParentCommand()
+                        .map(parentCommand -> createCommandWithParent(command, parentCommand))
+                        .orElse(commandRepository.create(command));
+                commandRepository.save(newCommandDM);
             }
         } catch (Exception ex) {
             throw new CommandStoreRuntimeException(String.format("Couldn't store command: %s", command), ex);
+        }
+    }
+
+    private Command createCommandWithParent(DomainCommand command, DomainCommand parentCommand) {
+        Optional<Command> parentCommandDM = commandRepository.findByUuid(parentCommand.getUuid().toString());
+        if (parentCommandDM.isPresent()) {
+            return commandRepository.create(command, parentCommandDM.get());
+        } else {
+            throw new CommandStoreRuntimeException(String.format("Couldn't find parent command: %s", command));
         }
     }
 }

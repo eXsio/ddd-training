@@ -30,6 +30,10 @@ public class CommandRepository {
         return new Command<>(domainCommand, eventRepository);
     }
 
+    public <T extends DomainCommand> Command<T> create(T domainCommand, Command parentCommand) {
+        return new Command<>(domainCommand, parentCommand, eventRepository);
+    }
+
     public <E extends DomainCommand> Command<E> save(Command<E> command) {
         return new Command<>(commandDao.save(command.getEntity()), eventRepository);
     }

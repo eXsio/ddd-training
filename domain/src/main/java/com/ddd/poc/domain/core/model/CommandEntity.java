@@ -6,6 +6,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -41,6 +43,14 @@ public class CommandEntity implements Comparable<CommandEntity> {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "command")
     private SortedSet<EventEntity> events;
 
+    @OrderBy("createdAt asc")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentCommand")
+    private SortedSet<CommandEntity> subCommands;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parentId", nullable = true, updatable = false)
+    private CommandEntity parentCommand;
+
     CommandEntity() {
 
     }
@@ -73,6 +83,18 @@ public class CommandEntity implements Comparable<CommandEntity> {
 
     public String getUuid() {
         return uuid;
+    }
+
+    public SortedSet<CommandEntity> getSubCommands() {
+        return subCommands;
+    }
+
+    public CommandEntity getParentCommand() {
+        return parentCommand;
+    }
+
+    protected void setParentCommand(CommandEntity parentCommand) {
+        this.parentCommand = parentCommand;
     }
 
     @Override

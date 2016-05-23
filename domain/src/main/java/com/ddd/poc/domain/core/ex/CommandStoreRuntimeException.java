@@ -5,4 +5,8 @@ public class CommandStoreRuntimeException extends RuntimeException {
     public CommandStoreRuntimeException(String msg, Throwable t) {
         super(msg, t);
     }
+
+    public CommandStoreRuntimeException(String msg) {
+        super(msg);
+    }
 }
