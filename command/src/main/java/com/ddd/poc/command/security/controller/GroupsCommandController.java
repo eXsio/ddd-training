@@ -9,6 +9,8 @@ import com.ddd.poc.domain.core.annotation.Synchronous;
 import com.ddd.poc.domain.core.service.CommandBus;
 import com.ddd.poc.domain.security.dto.GroupDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,12 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(RestUrls.GROUPS)
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class GroupsCommandController {
 
     private final CommandBus commandBus;
 
     @Autowired
-    public GroupsCommandController(@Asynchronous CommandBus commandBus) {
+    public GroupsCommandController(@Synchronous CommandBus commandBus) {
         this.commandBus = commandBus;
     }
 

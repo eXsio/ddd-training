@@ -14,7 +14,6 @@ public class Group extends BaseAggregate<GroupEntity> {
         super(entity);
     }
 
-    @Transactional
     public Group update(String name) {
         entity.setName(name);
         return this;

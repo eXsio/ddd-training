@@ -41,8 +41,9 @@ public class AsynchronousCommandBusImpl implements CommandBus {
                 LOGGER.info("publishing command - {}: {}", domainCommand.getClass().getName(), DataConverter.toString(domainCommand));
                 commandStore.store(domainCommand);
                 commandQueue.send(domainCommand);
-            } catch (Exception ex) {
-                LOGGER.error("An error occurred during command publishing, command: {}, exception: {}", DataConverter.toString(domainCommand), ex.getMessage(), ex);
+            } catch (RuntimeException ex) {
+                LOGGER.error("An error occurred during command publishing, command: {}, exception: {}", DataConverter.toString(domainCommand), ex.getMessage());
+                throw ex;
             }
         });
     }

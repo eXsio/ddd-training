@@ -11,6 +11,8 @@ import com.ddd.poc.domain.core.annotation.Synchronous;
 import com.ddd.poc.domain.core.service.CommandBus;
 import com.ddd.poc.domain.security.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(RestUrls.USERS)
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class UsersCommandController {
 
     private final CommandBus commandBus;
 
     @Autowired
-    public UsersCommandController(@Asynchronous CommandBus commandBus) {
+    public UsersCommandController(@Synchronous CommandBus commandBus) {
         this.commandBus = commandBus;
     }
 

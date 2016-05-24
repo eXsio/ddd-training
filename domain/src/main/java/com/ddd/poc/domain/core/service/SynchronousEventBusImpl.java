@@ -35,8 +35,9 @@ public class SynchronousEventBusImpl implements EventBus {
             LOGGER.info("publishing event - {}: {}", domainEvent.getClass().getName(), DataConverter.toString(domainEvent));
             eventStore.store(domainEvent, sourceCommand);
             eventQueue.send(domainEvent);
-        } catch (Exception ex) {
-            LOGGER.error("An error occurred during event publishing, event: {}, exception: {}", DataConverter.toString(domainEvent), ex.getMessage(), ex);
+        } catch (RuntimeException ex) {
+            LOGGER.error("An error occurred during event publishing, event: {}, exception: {}", DataConverter.toString(domainEvent), ex.getMessage());
+            throw ex;
         }
     }
 }
