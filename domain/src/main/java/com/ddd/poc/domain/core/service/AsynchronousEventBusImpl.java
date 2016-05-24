@@ -1,13 +1,9 @@
 package com.ddd.poc.domain.core.service;
 
 import com.ddd.poc.domain.core.annotation.Asynchronous;
+import com.ddd.poc.domain.core.annotation.Synchronous;
 import com.ddd.poc.domain.core.command.DomainCommand;
 import com.ddd.poc.domain.core.event.DomainEvent;
-import com.ddd.poc.domain.core.service.queue.EventQueue;
-import com.ddd.poc.domain.core.service.store.EventStore;
-import com.ddd.poc.domain.core.util.DataConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,34 +15,20 @@ import java.util.concurrent.Executors;
 @Asynchronous
 public class AsynchronousEventBusImpl implements EventBus {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(AsynchronousEventBusImpl.class);
-
-    private final EventStore eventStore;
-
-    private final EventQueue eventQueue;
+    private final EventBus eventBus;
 
     private final ExecutorService executor = Executors.newFixedThreadPool(10);
 
     @Autowired
-    public AsynchronousEventBusImpl(EventStore eventStore, EventQueue eventQueue) {
-        this.eventStore = eventStore;
-        this.eventQueue = eventQueue;
+    public AsynchronousEventBusImpl(@Synchronous EventBus eventBus) {
+        this.eventBus = eventBus;
     }
 
     @Override
     @Transactional
     public void publishEvent(DomainEvent domainEvent, DomainCommand sourceCommand) {
-
         executor.execute(() -> {
-            try {
-                LOGGER.info("publishing event - {}: {}", domainEvent.getClass().getName(), DataConverter.toString(domainEvent));
-                eventStore.store(domainEvent, sourceCommand);
-                eventQueue.send(domainEvent);
-
-            } catch (RuntimeException ex) {
-                LOGGER.error("An error occurred during event publishing, event: {}, exception: {}", DataConverter.toString(domainEvent), ex.getMessage());
-                throw ex;
-            }
+            eventBus.publishEvent(domainEvent, sourceCommand);
         });
 
     }
