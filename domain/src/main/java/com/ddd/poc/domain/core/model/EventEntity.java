@@ -29,7 +29,7 @@ public class EventEntity implements Comparable<EventEntity> {
     @Column(nullable = false, updatable = false)
     private String eventClass;
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, columnDefinition = "TEXT")
     private String eventData;
 
     @Column(nullable = false, updatable = false, unique = true)

@@ -30,7 +30,7 @@ public class CommandEntity implements Comparable<CommandEntity> {
     @Column(nullable = false, updatable = false)
     private Date createdAt = new Date();
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, columnDefinition = "TEXT")
     private String commandData;
 
     @Column(nullable = false, updatable = false)
